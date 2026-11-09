@@ -103,7 +103,7 @@
     code span.vs { color: #a3be8c; } /* VerbatimString */
     code span.wa { color: #bf616a; } /* Warning */
   </style>
-  <link rel="stylesheet" href="clase10_files/libs/revealjs/dist/theme/quarto-bf9d9d8ba25aab8e458272cf8b23524d.css">
+  <link rel="stylesheet" href="clase10_files/libs/revealjs/dist/theme/quarto-b14fa960a7109bfa0ee8e3454bdd618a.css">
   <link href="clase10_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="clase10_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="clase10_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -547,6 +547,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <p><span class="eyebrow">Tu turno · Completar el código</span></p>
 <p><span class="tiempo">⏱ 4 min</span></p>
 <p>Completen el método adecuado para cada tipo de dato y ejecuten.</p>
+<div class="opciones">
+<p><strong>Opciones para <code>method</code></strong> (siempre entre comillas): <code>"euclidean"</code> (euclidiana) · <code>"manhattan"</code> (Manhattan) · <code>"jaccard"</code> (Jaccard) · <code>"bray"</code> (Bray-Curtis). <code>dist()</code> acepta <code>"euclidean"</code> y <code>"manhattan"</code>; <code>vegdist()</code> acepta las cuatro.</p>
+</div>
 <div class="cell" data-exercise="ej_distancia">
 <div>
 <div id="webr-6" class="exercise-cell">
@@ -1115,6 +1118,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <p><span class="eyebrow">Tu turno · Completar el código</span></p>
 <p><span class="tiempo">⏱ 3 min</span></p>
 <p>Usen la varianza acumulada del PCA de reflectancia para encontrar el primer componente que llega al 95 %.</p>
+<div class="opciones">
+<p><strong>Qué escribir:</strong> un número entre 0 y 1 (proporción, con punto decimal). Ej.: 90 % se escribe <code>0.9</code>; 80 %, <code>0.8</code>.</p>
+</div>
 <div class="cell" data-exercise="ej_comp95">
 <div>
 <div id="webr-22" class="exercise-cell">
@@ -1248,6 +1254,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <p><span class="eyebrow">Tu turno · Aplicar</span></p>
 <p><span class="tiempo">⏱ 6 min · en parejas</span></p>
 <p>Repitan el flujo del PCA con <code>varechem</code> (14 variables del suelo, 24 sitios).</p>
+<div class="opciones">
+<p><strong>Opciones para <code>scale</code>:</strong> <code>TRUE</code> (estandarizar cada variable) o <code>FALSE</code> (usar las unidades originales). Sin comillas.</p>
+</div>
 <div class="cell" data-exercise="ej_pca_suelo">
 <div>
 <div id="webr-29" class="exercise-cell">
@@ -1527,6 +1536,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <p><span class="eyebrow">Tu turno · Predecir y verificar</span></p>
 <p><span class="tiempo">⏱ 4 min</span></p>
 <p><span class="pregunta"><strong>Predigan: con Jaccard (presencia/ausencia), ¿habrá más o menos eigenvalues negativos que con Bray-Curtis (8)? ¿Los dos primeros ejes explicarán más o menos del 49 %?</strong></span></p>
+<div class="opciones">
+<p><strong>Opciones para <code>method</code></strong> (siempre entre comillas): <code>"euclidean"</code> (euclidiana) · <code>"manhattan"</code> (Manhattan) · <code>"jaccard"</code> (Jaccard) · <code>"bray"</code> (Bray-Curtis). Con <code>binary = TRUE</code>, <code>vegdist()</code> usa solo presencia/ausencia.</p>
+</div>
 <div class="cell" data-exercise="ej_jaccard">
 <div>
 <div id="webr-45" class="exercise-cell">
@@ -1701,6 +1713,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <h2>Ejercicio: ¿cuántos ejes?</h2>
 <p><span class="eyebrow">NMDS en R · Ejercicio</span></p>
 <p>Completen el código para calcular el stress con <em>k</em> = 1 a 4 y elijan el menor <em>k</em> con stress &lt; 0,15.</p>
+<div class="opciones">
+<p><strong><code>distance</code>:</strong> <code>"euclidean"</code> · <code>"manhattan"</code> · <code>"jaccard"</code> · <code>"bray"</code> (entre comillas). <strong>Umbral:</strong> un número decimal con punto, p.&nbsp;ej. <code>0.2</code>.</p>
+</div>
 <div class="cell" data-exercise="ej_stress">
 <div>
 <div id="webr-52" class="exercise-cell">
@@ -1727,6 +1742,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><span class="eyebrow">Tu turno · Aplicar</span></p>
 <p><span class="tiempo">⏱ 10 min · en parejas</span></p>
 <p><code>mite</code>: abundancia de 35 especies de ácaros en 70 muestras de turbera; <code>mite.env</code>: densidad del sustrato, contenido de agua, tipo de sustrato, arbustos y microtopografía.</p>
+<div class="opciones">
+<p><strong><code>distance</code>:</strong> <code>"euclidean"</code> · <code>"manhattan"</code> · <code>"jaccard"</code> · <code>"bray"</code> (entre comillas). <strong><code>k</code>:</strong> un número entero sin comillas (<code>1</code>, <code>2</code>, <code>3</code> o <code>4</code>), según el stress del paso 1.</p>
+</div>
 <div class="cell" data-exercise="ej_mite">
 <div>
 <div id="webr-53" class="exercise-cell">
