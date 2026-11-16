@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<script src="clase11_files/libs/clipboard/clipboard.min.js"></script>
+<script src="clase11_files/libs/quarto-html/tabby.min.js"></script>
+<script src="clase11_files/libs/quarto-html/popper.min.js"></script>
+<script src="clase11_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="clase11_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="clase11_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="clase11_files/libs/quarto-html/quarto-syntax-highlighting-38902dcd73e7f8352ecceb5e549548c1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="clase11_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="clase11_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
+
+  <meta name="author" content="Prof.&nbsp;Javier Lopatin · javier.lopatin@uai.cl">
+  <title>Estadística multivariante 2</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="clase11_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="clase11_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #d8dee9; background-color: #2e3440; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #d8dee9; } /* Normal */
+    code span.al { color: #bf616a; background-color: #3b4252; font-weight: bold; } /* Alert */
+    code span.an { color: #d08770; } /* Annotation */
+    code span.at { color: #8fbcbb; } /* Attribute */
+    code span.bn { color: #b48ead; } /* BaseN */
+    code span.bu { color: #88c0d0; font-style: italic; } /* BuiltIn */
+    code span.cf { color: #81a1c1; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #ebcb8b; } /* Char */
+    code span.cn { color: #eceff4; font-weight: bold; } /* Constant */
+    code span.co { color: #616e88; } /* Comment */
+    code span.cv { color: #e5e9f0; } /* CommentVar */
+    code span.do { color: #5e81ac; } /* Documentation */
+    code span.dt { color: #81a1c1; } /* DataType */
+    code span.dv { color: #b48ead; } /* DecVal */
+    code span.er { color: #bf616a; text-decoration: underline; } /* Error */
+    code span.ex { color: #8fbcbb; font-weight: bold; } /* Extension */
+    code span.fl { color: #b48ead; } /* Float */
+    code span.fu { color: #88c0d0; } /* Function */
+    code span.im { color: #a3be8c; } /* Import */
+    code span.in { color: #ebcb8b; } /* Information */
+    code span.kw { color: #81a1c1; font-weight: bold; } /* Keyword */
+    code span.op { color: #81a1c1; } /* Operator */
+    code span.ot { color: #8fbcbb; } /* Other */
+    code span.pp { color: #5e81ac; } /* Preprocessor */
+    code span.re { color: #88c0d0; background-color: #3b4252; } /* RegionMarker */
+    code span.sc { color: #ebcb8b; } /* SpecialChar */
+    code span.ss { color: #d08770; } /* SpecialString */
+    code span.st { color: #a3be8c; } /* String */
+    code span.va { color: #5e81ac; } /* Variable */
+    code span.vs { color: #a3be8c; } /* VerbatimString */
+    code span.wa { color: #bf616a; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="clase11_files/libs/revealjs/dist/theme/quarto-2b40617c062425be63de9e889db1e37f.css">
+  <link href="clase11_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="clase11_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="clase11_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="clase11_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="clase11_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="clase11_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-color="#0F1B2A" data-background-image="img/portada.jpg" data-background-opacity="0.55" data-background-size="cover" class="quarto-title-block center">
+  <h1 class="title">Estadística multivariante 2</h1>
+  <p class="subtitle">Bioestadística · Clase 11</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Prof.&nbsp;Javier Lopatin · javier.lopatin@uai.cl
+</div>
+</div>
+</div>
+
+</section>
+<section id="un-mundo-multivariante" class="slide level2">
+<h2>Un mundo multivariante</h2>
+<p><span class="eyebrow">Estadística multivariante</span></p>
+<div class="cell">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImZpZy1oZWlnaHQiOiI1LjYiLCJmaWctd2lkdGgiOiI3IiwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2V9LCJjb2RlIjoib3B0aW9ucyh3aWR0aCA9IDcwKVxubGlicmFyeSh2ZWdhbilcbmxpYnJhcnkoZmFjdG9leHRyYSlcbmxpYnJhcnkoTmJDbHVzdClcblxuIyBwcsOhY3RpY28gMTMgZW4gc2VndW5kbyBwbGFubzogZGVqYSBsaXN0b3MgbG9zIG9iamV0b3MgKGRmLCByYW5kb21fZGYsIHBjYSxcbiMgY2x1c3RlcnMxLCB0cmFpdHMsIG5tZHMsIC4uLikgcGFyYSBxdWUgY3VhbHF1aWVyIGNlbGRhIHZpc2libGUgZnVuY2lvbmUgYXVucXVlXG4jIG5vIHNlIGhheWFuIGVqZWN1dGFkbyBsYXMgYW50ZXJpb3Jlcy4gU2luIGdyw6FmaWNvcy4gTG9zIE5iQ2x1c3QgdmFuIGNvblxuIyBpbmRleCA9IFwiYWxsXCIgKHLDoXBpZG8pOyBsYXMgY2VsZGFzIHZpc2libGVzIHVzYW4gbG9zIGRlbCBwcsOhY3RpY28uXG5sb2NhbCh7XG4gIG5iIDwtIGZ1bmN0aW9uKC4uLikgeyByIDwtIE5VTEw7IGludmlzaWJsZShjYXB0dXJlLm91dHB1dChyIDwtIE5iQ2x1c3QoLi4uKSkpOyByIH1cbiAgZGYgPC0gaXJpc1ssIC01XVxuICBzZXQuc2VlZCgxMjMpXG4gIHJhbmRvbV9kZiA8LSBhcy5kYXRhLmZyYW1lKGFwcGx5KGRmLCAyLCBmdW5jdGlvbih4KSBydW5pZihsZW5ndGgoeCksIG1pbih4KSwgbWF4KHgpKSkpXG4gIHBjYV9yYW5kb20gPC0gcHJjb21wKHJhbmRvbV9kZiwgc2NhbGUgPSBUUlVFKVxuICBwY2FfaXJpcyA8LSBwcmNvbXAoZGYsIHNjYWxlID0gVFJVRSlcbiAgc2V0LnNlZWQoMTIzKVxuICBrbWVhbnMxIDwtIGttZWFucyhzY2FsZShkZiksIGNlbnRlcnMgPSAzLCBuc3RhcnQgPSAyNSlcbiAgc2V0LnNlZWQoMTIzKVxuICBjbHVzdGVyczEgPC0gbmIoZGF0YSA9IHNjYWxlKGRmKSwgZGlzdGFuY2UgPSBcImV1Y2xpZGVhblwiLCBtaW4ubmMgPSAyLCBtYXgubmMgPSAxMCxcbiAgICAgICAgICAgICAgICAgIG1ldGhvZCA9IFwia21lYW5zXCIsIGluZGV4ID0gXCJhbGxcIilcbiAgZGF0YTEgPC0gcmVhZC5jc3YoJ2FuZ2Vyc19sZWFmX29wdGljYWxfMjAwMy5jc3YnKVxuICBkYXRhMSA8LSBkYXRhMVtkYXRhMSRNZWFzdXJlbWVudF90eXBlID09ICdyZWZsZWN0YW5jZScsIF1cbiAgdHJhaXRzIDwtIGRhdGExWywgYygyLCA0LCA3LCA5LCAxNSldXG4gIGNvbG5hbWVzKHRyYWl0cykgPC0gYygnQ2FyJywgJ0NhYicsICdDdycsICdDbScsICdOJylcbiAgcmVmbGVjIDwtIGRhdGExWywgMjI6bmNvbChkYXRhMSldXG4gIHBjYSA8LSBwcmNvbXAocmVmbGVjLCBzY2FsZSA9IFRSVUUpXG4gIHNldC5zZWVkKDEyMylcbiAgY2x1c3RlcnMyIDwtIG5iKGRhdGEgPSBwY2EkeFssIDE6Ml0sIGRpc3RhbmNlID0gXCJldWNsaWRlYW5cIiwgbWluLm5jID0gMiwgbWF4Lm5jID0gMTAsXG4gICAgICAgICAgICAgICAgICBtZXRob2QgPSBcImttZWFuc1wiLCBpbmRleCA9IFwiYWxsXCIpXG4gIHNldC5zZWVkKDEyMylcbiAgZW52IDwtIGVudmZpdChwY2EsIHRyYWl0cylcbiAgIyBwY2EgcXVlZGEgY29tbyBlbCBkZSBpcmlzIChsbyB1c2FuIGxhcyBwcmltZXJhcyBsYW1pbmFzKTsgbGEgZGlhcG9zaXRpdmFcbiAgIyDCq0NhcmdhciBsb3MgZGF0b3MgZGUgaG9qYXPCuyBsbyByZWVtcGxhemEgcG9yIGVsIGRlIHJlZmxlY3RhbmNpYVxuICBwY2EgPC0gcGNhX2lyaXM7IHJtKHBjYV9pcmlzKVxuICBjb2JfZGF0YSA8LSByZWFkLmNzdignQ292ZXJfc3BwX3BlYXRsYW5kLmNzdicpXG4gIHZlZ19kYXRhIDwtIHJlYWQuY3N2KCdQZWF0bGFuZC5jc3YnKVxuICBzZXQuc2VlZCgxMjMpXG4gIG5tZHMgPC0gbWV0YU1EUyhjb2JfZGF0YVssIDI6NDRdLCBrID0gMywgdHJ5bWF4ID0gMTAwMCwgdHJhY2UgPSAwKVxuICBzZXQuc2VlZCgxMjMpXG4gIHNwcF9lbnYgPC0gZW52Zml0KG5tZHMsIHZlZ19kYXRhWywgNDo3XSlcbiAgc2V0LnNlZWQoMTIzKVxuICBjbHVzdGVyczMgPC0gbmIoZGF0YSA9IHNjb3JlcyhubWRzKSRzaXRlcywgZGlzdGFuY2UgPSBcImV1Y2xpZGVhblwiLCBtaW4ubmMgPSAyLFxuICAgICAgICAgICAgICAgICAgbWF4Lm5jID0gMTAsIG1ldGhvZCA9IFwia21lYW5zXCIsIGluZGV4ID0gXCJhbGxsb25nXCIpXG4gIHJtKG5iKVxuICBmb3IgKHggaW4gbHMoKSkgYXNzaWduKHgsIGdldCh4KSwgZW52aXIgPSBnbG9iYWxlbnYoKSlcbn0pIn0=
+</script>
+</div>
+</div>
+<p>El mundo en el que vivimos no es de una sola dimensión, es <span class="pregunta"><strong><em>multivariante</em></strong></span>, con múltiples dimensiones, con muchos datos cruzándose todo el tiempo y con medidas de más de una variable aleatoria.</p>
+<p><strong>Definición formal</strong>: «<span class="concepto"><strong><em>rama de la estadística que abarca la observación y el análisis simultáneos de más de una variable respuesta</em></strong></span>».</p>
+<p>Hay dos aplicaciones típicas:</p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Reducción de información</span> <em>Feature reduction</em> – Ordenación (<em>ordination</em>): <span class="ojo">clase 10</span>.</p>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo"><em>Clustering</em></span> Agrupación de clases de datos homogéneos: <span class="ojo">hoy</span>.</p>
+</div>
+</div></div>
+<aside class="notes">
+<p>Esta versión de la clase está hecha con Quarto: las figuras de teoría se generaron con R al crear la presentación y todo el código del práctico 13 corre en el navegador (webR): se ejecuta con Run Code y se puede editar. Debe abrirse con un servidor local (./presentar 11), no con doble clic en el .html. La primera carga tarda alrededor de un minuto (factoextra, NbClust, vegan y hopkins se descargan al navegador). Recordatorio de la clase 10 (ordenación: PCA, NMDS); hoy el clustering y al final combinamos ambos.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="qué-es-el-clustering" class="slide level2">
+<h2>¿Qué es el <em>clustering</em>?</h2>
+<p><span class="eyebrow"><em>Clustering</em></span></p>
+<p>El término <span class="pregunta"><strong><em>clustering</em></strong></span> es también conocido como <span class="concepto"><strong><em>clasificación no supervisada</em></strong></span>, y hace referencia a un amplio abanico de técnicas cuya finalidad es <span class="ojo"><strong>encontrar patrones o grupos discretos (<em>clusters</em>) uniformes u homogéneos dentro de un conjunto de observaciones</strong></span>.</p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Particiones</span> Las observaciones dentro de un mismo grupo son similares entre ellas y distintas a las observaciones de otros grupos.</p>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Sin variable respuesta</span> <span class="concepto"><strong>No se requiere de una variable observada</strong></span>: la partición de los grupos es totalmente derivada de los datos.</p>
+</div>
+</div></div>
+<aside class="notes">
+<p>«No supervisada» porque no hay una variable observada (una clase conocida) que guíe la agrupación: los grupos salen solo de los datos. Contrasta con la clasificación supervisada, donde sí conocemos la clase de cada observación de entrenamiento.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="tres-grupos-principales" class="slide level2 texto-28">
+<h2>Tres grupos principales</h2>
+<p><span class="eyebrow"><em>Clustering</em> · Tipos</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo"><em>Partitioning clustering</em></span> El usuario especifica de antemano el número de <em>clusters</em> (K-means, K-medoids, CLARA).</p>
+</div>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo"><em>Hierarchical clustering</em></span> No requiere fijar de antemano el número de <em>clusters</em> (aglomerativo, divisivo).</p>
+</div>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Combinaciones</span> <em>Hierarchical K-means</em>, <em>fuzzy clustering</em>, <em>model based</em> y <em>density based clustering</em>.</p>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="clase11_files/figure-revealjs/unnamed-chunk-4-1.png" alt="Arriba, nube de puntos coloreada en tres grupos de K-means con sus centroides; abajo, dendrograma de los mismos puntos" width="770"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>En esta clase usamos K-means, el ejemplo más típico de partitioning clustering: por eso más adelante veremos cómo elegir el número de clusters antes de correrlo. El dendrograma muestra la alternativa jerárquica: el número de grupos se decide después, cortando el árbol a cierta altura.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="ordenación-o-clustering" class="slide level2 tu-turno scrollable">
+<h2>¿Ordenación o <em>clustering</em>?</h2>
+<p><span class="eyebrow">Tu turno · Discusión</span></p>
+<p><span class="tiempo">⏱ 3 min · en parejas</span></p>
+<p><span class="pregunta"><strong>Para cada pregunta, ¿usarían ordenación (clase 10), <em>clustering</em> (hoy) o ambos?</strong></span></p>
+<ol type="1">
+<li>¿Cuáles son los principales gradientes de composición de especies en 40 lagunas?</li>
+<li>¿Existen tipos de bosque distintos según la cobertura de 80 especies?</li>
+<li>Resumir 2000 bandas espectrales en unas pocas variables para un modelo.</li>
+<li>Clasificar parcelas de una turbera en asociaciones vegetacionales y describirlas.</li>
+</ol>
+<div class="fragment tarjeta">
+<ol type="1">
+<li><strong>Ordenación</strong> (gradientes continuos). 2. <strong><em>Clustering</em></strong> (grupos discretos). 3. <strong>Ordenación</strong> (reducir variables). 4. <strong>Ambos</strong>: primero ordenar y luego agrupar sobre los ejes; es lo que haremos al final de la clase.</li>
+</ol>
+</div>
+</section>
+<section>
+<section id="debo-hacer-clustering" class="title-slide slide level1 center" data-background-image="img/portada.jpg" data-background-opacity="0.5" data-background-color="#0F1B2A">
+<h1>¿Debo hacer <em>clustering</em>?</h1>
+<p><span class="eyebrow">Parte 1 · Tendencia a la agrupación</span></p>
+</section>
+<section id="qué-es-una-semilla" class="slide level2">
+<h2>¿Qué es una semilla?</h2>
+<p><span class="eyebrow">Práctico 13 · Inicio</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Muchas funciones de hoy usan números aleatorios (datos simulados, inicio de K-means, NMDS, Hopkins).</p>
+<p><span class="concepto"><strong><em>set.seed()</em></strong></span> fija el punto de partida del generador de números aleatorios: <span class="clave"><strong>con la misma semilla se obtienen siempre los mismos resultados</strong></span> (reproducibilidad).</p>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoic2V0LnNlZWQoMTIzKVxucnVuaWYoMylcbnNldC5zZWVkKDEyMylcbnJ1bmlmKDMpICAjIGxvcyBtaXNtb3MgdHJlcyBudW1lcm9zXG5ydW5pZigzKSAgIyBzaW4gdm9sdmVyIGEgZmlqYXIgbGEgc2VtaWxsYTogb3Ryb3MifQ==
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="los-datos-iris-y-datos-aleatorios" class="slide level2">
+<h2>Los datos: <em>iris</em> y datos aleatorios</h2>
+<p><span class="eyebrow">Práctico 13 · Datos</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyMgZGF0b3MgaXJpcyBkZSBwbGFudGFzOiBsYXJnbyB5IGFuY2hvIGRlIHNlcGFsb3MgeVxuIyMgcGV0YWxvcyAoY20pIGRlIDUwIGZsb3JlcyBkZSAzIGVzcGVjaWVzIGRlIGlyaXNcbmRhdGEoXCJpcmlzXCIpXG4jIHNhY2FyIGluZm9ybWFjaW9uIHF1ZSBubyBlcyBuZWNlc2FyaWFcbmRmIDwtIGlyaXNbLCAtNV1cbmhlYWQoZGYpIn0=
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBkYXRhc2V0IGRlIG1lbnRpcmE6IHZhbG9yZXMgYWxlYXRvcmlvcyAodW5pZm9ybWVzKVxuIyBlbiBlbCByYW5nbyBkZSB2YWxvcmVzIGRlIGNhZGEgY29sdW1uYVxuc2V0LnNlZWQoMTIzKVxucmFuZG9tX2RmIDwtIGFwcGx5KGRmLCAyLCAjIE1BUkdJTiA9IDI6IHNvYnJlIGxhcyBjb2x1bW5hc1xuICAgICAgICAgICAgICAgICAgIGZ1bmN0aW9uKHgpe3J1bmlmKGxlbmd0aCh4KSwgbWluKHgpLCAobWF4KHgpKSl9KVxucmFuZG9tX2RmIDwtIGFzLmRhdGEuZnJhbWUocmFuZG9tX2RmKVxuaGVhZChyYW5kb21fZGYpIn0=
+</script>
+</div>
+</div>
+</div></div>
+<p>Vamos a comparar la posibilidad de hacer <em>clustering</em> con datos <span class="ojo"><strong>agrupados</strong></span> (<em>iris</em>) y <span class="ojo"><strong>aleatorios</strong></span> (<code>random_df</code>).</p>
+</section>
+<section id="pca-se-ven-grupos" class="slide level2">
+<h2>PCA: ¿se ven grupos?</h2>
+<p><span class="eyebrow">Práctico 13 · PCA</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBQQ0EgY29uIGRhdG9zIGVzY2FsYWRvc1xucGNhID0gcHJjb21wKGRmLCBzY2FsZSA9IFQpXG5wY2FfcmFuZG9tID0gcHJjb21wKHJhbmRvbV9kZiwgc2NhbGUgPSBUKVxuIyBjb2xvcmVzIHBvciBlc3BlY2llLCBubyBwb3IgY2x1c3RlcnNcbmZ2aXpfcGNhX2luZChwY2EsIHRpdGxlID0gXCJQQ0EgLSBJcmlzIGRhdGFcIixcbiAgICAgICAgICAgICBoYWJpbGxhZ2UgPSBpcmlzJFNwZWNpZXMsXG4gICAgICAgICAgICAgcGFsZXR0ZSA9IFwiamNvXCIsIGdlb20gPSBcInRleHRcIixcbiAgICAgICAgICAgICBnZ3RoZW1lID0gdGhlbWVfY2xhc3NpYygpLCBsZWdlbmQgPSBcImJvdHRvbVwiKSJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBkYXRvcyBhbGVhdG9yaW9zOiBzaW4gZXNwZWNpZXNcbmZ2aXpfcGNhX2luZChwY2FfcmFuZG9tLFxuICAgICAgICAgICAgIHRpdGxlID0gXCJQQ0EgLSBSYW5kb20gZGF0YVwiLFxuICAgICAgICAgICAgIGdlb20gPSBcInBvaW50XCIsXG4gICAgICAgICAgICAgZ2d0aGVtZSA9IHRoZW1lX2NsYXNzaWMoKSkifQ==
+</script>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>fviz_pca_ind() es una función del paquete factoextra para gráficos de ordenación (alternativa a ordiplot de vegan o biplot). En iris se ven dos nubes: setosa sola a la izquierda y versicolor + virginica juntas. En los datos aleatorios, una nube sin estructura.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="variables-y-biplot" class="slide level2">
+<h2>Variables y <em>biplot</em></h2>
+<p><span class="eyebrow">Práctico 13 · PCA</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyB2ZWN0b3JlcyBkZSBsYXMgdmFyaWFibGVzXG5mdml6X3BjYV92YXIocGNhLFxuICAgICAgICAgICAgIGdlb20gPSBcImFycm93XCIsXG4gICAgICAgICAgICAgY29sLnZhciA9IFwicmVkXCIsXG4gICAgICAgICAgICAgYWxwaGEudmFyID0gXCJjb250cmliXCIpICtcbiAgdGhlbWVfbWluaW1hbCgpIn0=
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBlbiBlbCBwcmFjdGljbzogZnZpel9wY2FfYmlwbG90KHBjYSk7IGVuIGVsIG5hdmVnYWRvclxuIyBlc2EgZnVuY2lvbiBmYWxsYSwgYXNpIHF1ZSB1c2Ftb3MgYmlwbG90KCkgZGUgUiBiYXNlXG5iaXBsb3QocGNhLCBjb2wgPSBjKFwiZ3JleTUwXCIsIFwicmVkXCIpKVxuIyBwcnVlYmVuIHRhbWJpw6luOiBiaXBsb3QocGNhX3JhbmRvbSkifQ==
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="el-estadístico-de-hopkins" class="slide level2">
+<h2>El estadístico de Hopkins</h2>
+<p><span class="eyebrow">¿Debo hacer <em>clustering</em>? · Hopkins</span></p>
+<div class="columns">
+<div class="column" style="width:52%;">
+<p>Estima la <span class="ojo"><strong>tendencia a la agrupación</strong></span> comparando la distancia de <span class="ojo"><strong>puntos al azar (uniformes) a su dato más cercano</strong></span> (<em>u</em>) con la de <span class="ojo"><strong>datos reales a su vecino más cercano</strong></span> (<em>w</em>): <span class="clave"><strong>comprueba la aleatoriedad espacial de los datos</strong></span>.</p>
+<p><span class="formula"><em>H</em> = Σ<em>u</em> / (Σ<em>u</em> + Σ<em>w</em>)</span></p>
+<div class="tarjeta">
+<p><span class="concepto"><strong>H0</strong>: los datos están distribuidos uniformemente (no hay conglomerados). <strong>H1</strong>: no están distribuidos uniformemente (contienen conglomerados).</span></p>
+</div>
+</div><div class="column" style="width:48%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="clase11_files/figure-revealjs/unnamed-chunk-12-1.png" alt="Arriba, datos agrupados en dos nubes: los puntos al azar (triángulos naranjos) quedan lejos de los datos y los datos reales (círculos verdes) muy cerca de su vecino, H cercano a 1. Abajo, datos uniformes: ambas distancias se parecen, H cercano a 0,5" width="770"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>Si los datos son uniformes (aleatorios en el espacio), cualquier algoritmo de clustering igual entregará grupos, pero no tendrán sentido. Por eso conviene evaluar primero la tendencia a la agrupación. Con datos uniformes, ambas distancias se parecen y H ≈ 0,5; con datos agrupados, los datos reales tienen vecinos mucho más cerca que los puntos al azar y H se acerca a 1. Hopkins no es una probabilidad sino una razón de distancias. La figura usa solo 8 puntos de cada tipo para que se vea; las funciones de R usan más.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="cuidado-con-el-umbral-de-05" class="slide level2">
+<h2>Cuidado con el umbral de 0,5</h2>
+<p><span class="eyebrow">¿Debo hacer <em>clustering</em>? · Hopkins</span></p>
+<div class="tarjeta alerta">
+<p><span class="pregunta"><strong>OJO:</strong></span> algunas funciones de R entregan <em>H</em> y otras entregan 1 − <em>H</em>. El valor de referencia es 0,5 (datos al azar), pero se lee al revés: <span class="ojo"><strong>con <em>H</em>, valores cercanos a 1 indican grupos; con 1 − <em>H</em>, valores cercanos a 0</strong></span>.</p>
+</div>
+<p><span class="grande"><strong>¡Revisar siempre qué significa el método a usar!</strong></span></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 47%">
+<col style="width: 16%">
+<col style="width: 18%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Función</th>
+<th>Entrega</th>
+<th>Agrupable</th>
+<th>Al azar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>factoextra::get_clust_tendency()</code></td>
+<td><em>H</em></td>
+<td>cerca de 1</td>
+<td>≈ 0,5</td>
+</tr>
+<tr class="even">
+<td><code>hopkins::hopkins()</code></td>
+<td><em>H</em> (+ valor p con <code>hopkins.pval()</code>)</td>
+<td>cerca de 1</td>
+<td>≈ 0,5</td>
+</tr>
+<tr class="odd">
+<td><code>clustertend::hopkins()</code> (obsoleto)</td>
+<td>1 − <em>H</em></td>
+<td>cerca de 0</td>
+<td>≈ 0,5</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="hopkins-en-r-h" class="slide level2">
+<h2>Hopkins en R: <em>H</em></h2>
+<p><span class="eyebrow">Práctico 13 · Hopkins</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-9" class="exercise-cell">
+
+</div>
+<script type="webr-9-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBnZXRfY2x1c3RfdGVuZGVuY3kgKGZhY3RvZXh0cmEpIGVudHJlZ2EgSDpcbiMgdmFsb3JlcyBjZXJjYW5vcyBhIDEgaW5kaWNhbiBkYXRvcyBhZ3J1cGFibGVzXG4jIGRhdGEgaXJpc1xuc2V0LnNlZWQoMTIzKVxucmVzIDwtIGdldF9jbHVzdF90ZW5kZW5jeShkZiwgbiA9IG5yb3coZGYpLTEsIGdyYXBoID0gRkFMU0UpXG5yZXMkaG9wa2luc19zdGF0XG4jIGRhdGEgcmFuZG9tXG5zZXQuc2VlZCgxMjMpXG5yZXMgPC0gZ2V0X2NsdXN0X3RlbmRlbmN5KHJhbmRvbV9kZiwgbiA9IG5yb3cocmFuZG9tX2RmKS0xLCBncmFwaCA9IEZBTFNFKVxucmVzJGhvcGtpbnNfc3RhdCJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-10" class="exercise-cell">
+
+</div>
+<script type="webr-10-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBob3BraW5zOjpob3BraW5zIChXcmlnaHQgMjAyMikgZW50cmVnYSBIIHkgdW4gdmFsb3IgcFxuIyBwb3IgZGVmZWN0byB1c2EgbSA9IG4vMTAgcHVudG9zOyBjb24gbWFzIChtKSBlcyBtYXMgZXN0YWJsZVxuc2V0LnNlZWQoMTIzKVxuaF9pcmlzIDwtIGhvcGtpbnM6OmhvcGtpbnMoZGYsIG0gPSA1MClcbnNldC5zZWVkKDEyMylcbmhfcmFuZG9tIDwtIGhvcGtpbnM6OmhvcGtpbnMocmFuZG9tX2RmLCBtID0gNTApXG5oX2lyaXNcbmhfcmFuZG9tXG5ob3BraW5zOjpob3BraW5zLnB2YWwoaF9pcmlzLCA1MClcbmhvcGtpbnM6OmhvcGtpbnMucHZhbChoX3JhbmRvbSwgNTApIn0=
+</script>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>En R instalado en el computador (R 4.5, factoextra 1.0.7), get_clust_tendency da 0,837 para iris y 0,471 para los datos aleatorios (Practicos/salidas/13_multivariante2.txt). La versión que corre en el navegador (webR) avisa que usa la fórmula corregida de Hopkins («uses the corrected formula») y da otro número: 0,998 para iris y 0,454 para los aleatorios; la lectura es la misma: iris es agrupable y los datos aleatorios no. hopkins::hopkins da 0,997 (p = 0) para iris y 0,460 (p = 0,42) para los aleatorios.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="hopkins-en-r-1-h" class="slide level2">
+<h2>Hopkins en R: 1 − <em>H</em></h2>
+<p><span class="eyebrow">Práctico 13 · Hopkins</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-11" class="exercise-cell">
+
+</div>
+<script type="webr-11-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBPSk86IGNsdXN0ZXJ0ZW5kIHkgaG9wa2lucyB0aWVuZW4gYW1ib3MgdW5hXG4jIGZ1bmNpb24gaG9wa2lucygpIHF1ZSBzZSBsZWVuIGFsIHJldmVzOlxuIyBzZSBlc2NyaWJlIGVsIHBhcXVldGUgKHBhcXVldGU6OmZ1bmNpb24pLlxuXG4jIGNsdXN0ZXJ0ZW5kOjpob3BraW5zIChvYnNvbGV0bykgZW50cmVnYSAxIC0gSDpcbiMgY2VyY2FubyBhIDAgaW5kaWNhIGRhdG9zIGFncnVwYWJsZXNcbnNldC5zZWVkKDEyMylcbmNsdXN0ZXJ0ZW5kOjpob3BraW5zKGRmLCBuID0gbnJvdyhkZikgLSAxKVxuc2V0LnNlZWQoMTIzKVxuY2x1c3RlcnRlbmQ6OmhvcGtpbnMocmFuZG9tX2RmLCBuID0gbnJvdyhyYW5kb21fZGYpIC0gMSkifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><span class="pregunta"><strong>Los mismos datos, lecturas opuestas.</strong></span></p>
+<p><em>iris</em>: 0,17 con <code>clustertend</code> (lejos de 0,5 hacia 0) y 0,997 con <code>hopkins</code> (lejos de 0,5 hacia 1): <span class="clave"><strong>agrupable en ambos casos</strong></span>.</p>
+<p>Datos aleatorios: ≈ 0,5 con las dos.</p>
+</div></div>
+</section>
+<section id="grupos-o-no-uniformes" class="slide level2 tu-turno">
+<h2>¿Grupos o no uniformes?</h2>
+<p><span class="eyebrow">Tu turno · Predecir y verificar</span></p>
+<p><span class="tiempo">⏱ 4 min · en parejas</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><span class="pregunta"><strong>Antes de ejecutar: ¿cuánto valdrá <em>H</em> en cada conjunto? ¿Cuál tiene grupos?</strong></span></p>
+<div class="cell">
+<div>
+<div id="webr-12" class="exercise-cell">
+
+</div>
+<script type="webr-12-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjozLjQsImZpZy13aWR0aCI6OX0sImNvZGUiOiJzZXQuc2VlZCgxKVxudW5pZiA8LSBkYXRhLmZyYW1lKHggPSBydW5pZigxMDApLCB5ID0gcnVuaWYoMTAwKSlcbmRvcyAgPC0gZGF0YS5mcmFtZSh4ID0gYyhybm9ybSg1MCwgMCwgLjMpLCBybm9ybSg1MCwgMywgLjMpKSxcbiAgICAgICAgICAgICAgICAgICB5ID0gYyhybm9ybSg1MCwgMCwgLjMpLCBybm9ybSg1MCwgMywgLjMpKSlcbm51YmUgPC0gZGF0YS5mcmFtZSh4ID0gcm5vcm0oMTAwKSwgeSA9IHJub3JtKDEwMCkpXG5wYXIobWZyb3cgPSBjKDEsIDMpKVxucGxvdCh1bmlmLCBtYWluID0gXCJ1bmlmXCIpOyBwbG90KGRvcywgbWFpbiA9IFwiZG9zXCIpOyBwbG90KG51YmUsIG1haW4gPSBcIm51YmVcIikifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-13" class="exercise-cell">
+
+</div>
+<script type="webr-13-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiZm9yIChkIGluIGxpc3QodW5pZiwgZG9zLCBudWJlKSkge1xuICBzZXQuc2VlZCgxMjMpXG4gIGggPC0gaG9wa2luczo6aG9wa2lucyhkLCBtID0gMzApXG4gIHByaW50KGMoSCA9IGgsIHAgPSBob3BraW5zOjpob3BraW5zLnB2YWwoaCwgMzApKSlcbn0ifQ==
+</script>
+</div>
+</div>
+<div class="fragment tarjeta">
+<p><code>unif</code> ≈ 0,50 (p ≈ 0,98) · <code>dos</code> ≈ 0,99 (p ≈ 0) · <code>nube</code> ≈ 0,69 (p ≈ 0,003). <span class="clave">La nube normal <strong>no tiene grupos</strong>, pero tampoco es uniforme: Hopkins rechaza H0. Rechazar la uniformidad no prueba que haya <em>clusters</em>: hay que mirar los datos (VAT, ordenación).</span></p>
+</div>
+</div></div>
+</section>
+<section id="método-visual-vat" class="slide level2">
+<h2>Método visual: VAT</h2>
+<p><span class="eyebrow">¿Debo hacer <em>clustering</em>? · Método visual</span></p>
+<p>El algoritmo «<span class="concepto"><strong><em>visual assessment of cluster tendency</em></strong></span>» (VAT) (Bezdek y Hathaway, 2002):</p>
+<div class="columns">
+<div class="column" style="width:32%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">1 · DM</span> Calcular una matriz de disimilaridad (DM) usando la distancia euclidiana.</p>
+</div>
+</div><div class="column" style="width:2%;">
+
+</div><div class="column" style="width:32%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">2 · ODM</span> Reordenar la DM para que los objetos similares estén cerca unos de otros: matriz de disimilaridad ordenada (ODM).</p>
+</div>
+</div><div class="column" style="width:2%;">
+
+</div><div class="column" style="width:32%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">3 · ODI</span> La ODM se presenta como una imagen de disimilitud ordenada (ODI): el resultado visual de VAT.</p>
+</div>
+</div></div>
+<p>En R: la matriz con <span class="concepto"><strong><em>dist()</em></strong></span> y la imagen con <span class="ojo"><strong><em>fviz_dist()</em></strong></span> [paquete factoextra].</p>
+<aside class="notes">
+<p>dist() sirve bien en este caso; para más opciones de distancias (Bray-Curtis, etc.) usar vegdist() del paquete vegan.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="vat-en-r-iris-vs.-aleatorios" class="slide level2">
+<h2>VAT en R: <em>iris</em> vs.&nbsp;aleatorios</h2>
+<p><span class="eyebrow">Práctico 13 · Interpretación visual</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-14" class="exercise-cell">
+
+</div>
+<script type="webr-14-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBtYXRyaXogZGUgZGlzaW1pbGFyaWRhZCwgZGlzdGFuY2lhIGV1Y2xpZGlhbmFcbiMgZGF0b3MgSXJpc1xuZG0gPC0gZGlzdChkZilcbmZ2aXpfZGlzdChkbSkifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-15" class="exercise-cell">
+
+</div>
+<script type="webr-15-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBkYXRvcyByYW5kb21cbmRtIDwtIGRpc3QocmFuZG9tX2RmKVxuZnZpel9kaXN0KGRtKSJ9
+</script>
+</div>
+</div>
+</div></div>
+<p><span class="pregunta"><strong>¿Cuántos bloques ven en <em>iris</em>? ¿Coincide con las 3 especies?</strong></span></p>
+<aside class="notes">
+<p>Rojo = baja disimilitud (observaciones parecidas), azul = alta. En iris se ven dos bloques definidos en la diagonal: uno chico (setosa) y uno grande (versicolor + virginica, que se parecen mucho entre sí). En los datos aleatorios no hay estructura de bloques. Esta pregunta adelanta lo que dirán los métodos de número de clusters: 2, no 3.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="k-means" class="title-slide slide level1 center" data-background-image="img/portada.jpg" data-background-opacity="0.5" data-background-color="#0F1B2A">
+<h1>K-means</h1>
+<p><span class="eyebrow">Parte 2</span></p>
+</section>
+<section id="k-means-clustering" class="slide level2">
+<h2>K-means <em>clustering</em></h2>
+<p><span class="eyebrow">K-means</span></p>
+<p>El método K-means (MacQueen, 1967) agrupa las observaciones en <em>K</em> <em>clusters</em> distintos, <span class="pregunta"><strong>donde el número <em>K</em> se determina antes de ejecutar el algoritmo</strong></span>.</p>
+<p>Encuentra los <span class="concepto"><strong><em>K</em> mejores <em>clusters</em></strong>: aquellos cuya <strong>varianza interna</strong> (<em>intra-cluster variation</em>) sea lo más pequeña posible</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="clase11_files/figure-revealjs/unnamed-chunk-20-1.png" alt="Cuatro pasos de K-means con K = 2: centroides iniciales al azar, asignación de cada punto al centroide más cercano, recálculo de los centroides como la media del grupo, y solución final" width="1870"></p>
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Pasos del algoritmo: (1) elegir K centroides al azar; (2) asignar cada observación al centroide más cercano; (3) recalcular cada centroide como la media de su grupo; (4) repetir 2 y 3 hasta que las asignaciones no cambien.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="un-problema-de-optimización" class="slide level2">
+<h2>Un problema de optimización</h2>
+<p><span class="eyebrow">K-means</span></p>
+<p>Se reparten las observaciones en <em>K</em> <em>clusters</em> de forma que <span class="ojo"><strong>la suma de las varianzas internas de todos ellos sea lo menor posible</strong></span>. Para eso hay que <span class="clave"><strong>definir un modo de cuantificar la varianza interna</strong></span>.</p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Mínimo global</span> Minimizar la varianza interna de forma exacta es complejo: hay una inmensa cantidad de formas de dividir <em>n</em> observaciones en <em>K</em> grupos.</p>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Óptimo local</span> Es posible obtener una solución que, aun no siendo la mejor de todas, es muy buena.</p>
+</div>
+</div></div>
+<p>En R, <code>kmeans()</code> usa la suma de cuadrados dentro de cada <em>cluster</em> (<code>withinss</code>); su total es <code>tot.withinss</code>.</p>
+</section>
+<section id="k-means-a-mano" class="slide level2 tu-turno">
+<h2>K-means a mano</h2>
+<p><span class="eyebrow">Tu turno · Predecir y verificar</span></p>
+<p><span class="tiempo">⏱ 3 min · en parejas</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Seis observaciones en una sola variable:</p>
+<p><span class="grande">1 · 2 · 3 · 10 · 11 · 12</span></p>
+<p>Centroides iniciales: <strong>1</strong> y <strong>2</strong>.</p>
+<p><span class="pregunta"><strong>Hagan a mano los pasos 2 y 3 hasta que nada cambie. ¿Qué grupos y qué centroides quedan?</strong></span></p>
+<div class="fragment tarjeta">
+<p>1.ª vuelta: {1} y {2, 3, 10, 11, 12} → centroides 1 y 7,6. 2.ª vuelta: {1, 2, 3} y {10, 11, 12} → centroides <strong>2</strong> y <strong>11</strong>. Ya no cambia. Suma de cuadrados interna: 1 + 0 + 1 + 1 + 0 + 1 = <strong>4</strong>.</p>
+</div>
+</div><div class="column" style="width:50%;">
+<p>Verifíquenlo en R:</p>
+<div class="cell">
+<div>
+<div id="webr-16" class="exercise-cell">
+
+</div>
+<script type="webr-16-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoieCA8LSBjKDEsIDIsIDMsIDEwLCAxMSwgMTIpXG5rbSA8LSBrbWVhbnMoeCwgY2VudGVycyA9IGMoMSwgMikpXG5rbSRjbHVzdGVyXG5rbSRjZW50ZXJzXG5rbSR0b3Qud2l0aGluc3MifQ==
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="ventajas-y-desventajas" class="slide level2 texto-28">
+<h2>Ventajas y desventajas</h2>
+<p><span class="eyebrow">K-means · Ventajas y desventajas</span></p>
+<p>K-means es uno de los métodos de <em>clustering</em> más utilizados: destaca por su <span class="clave"><strong>sencillez y velocidad</strong></span>. Pero tiene limitaciones:</p>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">1 · Hay que fijar <em>K</em> de antemano</span> Puede ser complicado sin información adicional sobre los datos. Hay estrategias para estimar <em>K</em> óptimo (parte 3), aunque todas son orientativas.</p>
+</div>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">2 · Depende del inicio aleatorio</span> Los grupos pueden variar según los centroides iniciales. Se recomienda <span class="ojo"><strong>repetir 25–50 veces</strong></span> (<code>nstart</code>) y quedarse con el de menor varianza interna, y usar <span class="ojo"><strong>semillas</strong></span> (<code>set.seed()</code>) para que sea reproducible.</p>
+</div>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">3 · Poco robusto frente a <em>outliers</em></span> La única solución es excluirlos o usar métodos más robustos como K-medoids (PAM).</p>
+</div>
+</section>
+<section id="en-vivo-el-inicio-aleatorio" class="slide level2">
+<h2>En vivo: el inicio aleatorio</h2>
+<p><span class="eyebrow">K-means · R en el navegador</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<p>Con un solo inicio (<code>nstart = 1</code>), cada semilla puede llevar a otro óptimo local. Cambien la semilla y ejecuten de nuevo; luego prueben <code>nstart = 25</code>.</p>
+<div class="cell">
+<div>
+<div id="webr-17" class="exercise-cell">
+
+</div>
+<script type="webr-17-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiWCA8LSBzY2FsZShkZilcbmZvciAocyBpbiAxOjgpIHtcbiAgc2V0LnNlZWQocylcbiAga20gPC0ga21lYW5zKFgsIGNlbnRlcnMgPSAzLCBuc3RhcnQgPSAxKVxuICBjYXQoXCJzZW1pbGxhXCIsIHMsIFwiIHRvdC53aXRoaW5zcyA9XCIsIHJvdW5kKGttJHRvdC53aXRoaW5zcywgMiksXG4gICAgICBcIiB0YW1hw7FvczpcIiwga20kc2l6ZSwgXCJcXG5cIilcbn0ifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<p><span class="pregunta"><strong>¿Por qué no siempre da lo mismo? ¿Qué solución elegirían?</strong></span></p>
+<div class="fragment tarjeta">
+<p>Cada inicio converge a un óptimo <strong>local</strong>. Se elige el de <span class="clave"><strong>menor <code>tot.withinss</code></strong></span>: eso hace <code>nstart = 25</code> automáticamente.</p>
+</div>
+</div></div>
+</section>
+<section id="con-cuál-te-quedas" class="slide level2 tu-turno">
+<h2>¿Con cuál te quedas?</h2>
+<p><span class="eyebrow">Tu turno · Discusión</span></p>
+<p><span class="tiempo">⏱ 3 min</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="clase11_files/figure-revealjs/unnamed-chunk-23-1.png" alt="Los mismos puntos agrupados con K-means: a la izquierda con K = 2 (dos grupos grandes) y a la derecha con K = 6 (seis grupos chicos)" width="1760"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="pregunta"><strong>Las dos opciones son buenas: las clases no se sobreponen. ¿Con cuál te quedas y por qué?</strong></span></p>
+<div class="fragment tarjeta">
+<p>Ambas particiones son «válidas»: <span class="clave"><strong>elegir <em>K</em> depende de la pregunta y de la información previa</strong></span> (¿dos tipos de hábitat o seis comunidades?). Por eso necesitamos criterios para elegir <em>K</em>: la parte siguiente.</p>
+</div>
+</section>
+<section id="k-means-en-r" class="slide level2">
+<h2>K-means en R</h2>
+<p><span class="eyebrow">Práctico 13 · K-means</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-18" class="exercise-cell">
+
+</div>
+<script type="webr-18-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBuc3RhcnQgPSAyNTogcmVwaXRlIEstbWVhbnMgY29uIDI1IGluaWNpb3MgYWxlYXRvcmlvc1xuIyB5IHNlIHF1ZWRhIGNvbiBlbCBkZSBtZW5vciBzdW1hIGRlIGN1YWRyYWRvcyBpbnRlcm5hXG5zZXQuc2VlZCgxMjMpXG5rbWVhbnMxIDwtIGttZWFucyhzY2FsZShkZiksIGNlbnRlcnMgPSAzLCBuc3RhcnQgPSAyNSlcbmttZWFuczEkY2x1c3Rlclxua21lYW5zMSR0b3Qud2l0aGluc3MifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<p><code>kmeans1$cluster</code>: el grupo de cada flor.</p>
+<p><code>kmeans1$tot.withinss</code>: la <span class="ojo"><strong>suma de cuadrados interna total</strong></span> (lo que K-means minimiza).</p>
+<p>Otros elementos: <code>centers</code> (centroides), <code>size</code> (tamaño de cada grupo), <code>withinss</code> (por grupo).</p>
+<p><span class="pregunta"><strong>¿Coinciden los grupos con las especies?</strong> Las flores 1–50 son setosa, 51–100 versicolor y 101–150 virginica.</span></p>
+</div></div>
+</section></section>
+<section>
+<section id="número-óptimo-de-clusters" class="title-slide slide level1 center" data-background-image="img/portada.jpg" data-background-opacity="0.5" data-background-color="#0F1B2A">
+<h1>Número óptimo de <em>clusters</em></h1>
+<p><span class="eyebrow">Parte 3</span></p>
+</section>
+<section id="cuántos-clusters" class="slide level2">
+<h2>¿Cuántos <em>clusters</em>?</h2>
+<p><span class="eyebrow">Número óptimo de <em>clusters</em></span></p>
+<p>Determinar el número óptimo de <em>clusters</em> es uno de los pasos más complicados, sobre todo en <em>partitioning clustering</em>, donde el número <span class="test"><strong>se tiene que especificar antes de poder ver los resultados</strong></span>.</p>
+<p>No existe una forma única de averiguarlo: es un proceso bastante <span class="ojo"><strong>subjetivo</strong></span>, que depende del tipo de <em>clustering</em> y de la información previa (estudios anteriores pueden sugerir o acotar las posibilidades). Hay varias estrategias que ayudan:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 33%">
+<col style="width: 18%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Método</th>
+<th>Mide</th>
+<th>Mejor <em>K</em></th>
+<th>En R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Codo (<em>elbow</em>)</td>
+<td>varianza intra-<em>cluster</em> (wss)</td>
+<td>donde la curva deja de caer</td>
+<td><code>method = "wss"</code></td>
+</tr>
+<tr class="even">
+<td>Silueta</td>
+<td>qué tan bien cae cada punto en su grupo</td>
+<td>máximo</td>
+<td><code>method = "silhouette"</code></td>
+</tr>
+<tr class="odd">
+<td><em>Gap statistic</em></td>
+<td>wss comparado con datos al azar</td>
+<td>primer <em>K</em> que no mejora claramente (línea punteada)</td>
+<td><code>method = "gap_stat"</code></td>
+</tr>
+<tr class="even">
+<td><code>NbClust()</code></td>
+<td>30 índices a la vez</td>
+<td>el más votado</td>
+<td><code>index = "alllong"</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="el-método-del-codo" class="slide level2">
+<h2>El método del codo</h2>
+<p><span class="eyebrow">Número óptimo de <em>clusters</em> · En R</span></p>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p>El método <em>Elbow</em> <span class="test"><strong>calcula la varianza total intra-<em>cluster</em> en función del número de <em>clusters</em> y escoge como óptimo aquel valor a partir del cual añadir más <em>clusters</em> apenas consigue mejoría</strong></span>.</p>
+<p><em>fviz_nbclust()</em> (factoextra) automatiza el proceso con la suma de residuos cuadrados internos (wss): <span class="ojo"><strong>más bajo es mejor</strong></span>, pero siempre baja al aumentar <em>K</em>.</p>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-19" class="exercise-cell">
+
+</div>
+<script type="webr-19-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyA/a21lYW5zIDsgP2Z2aXpfbmJjbHVzdCAgcGFyYSB2ZXIgbGEgYXl1ZGFcbnNldC5zZWVkKDEyMylcbmZ2aXpfbmJjbHVzdCh4ID0gc2NhbGUoZGYpLCBGVU5jbHVzdGVyID0ga21lYW5zLFxuICAgICAgICAgICAgIG1ldGhvZCA9IFwid3NzXCIsIGsubWF4ID0gMTUpICtcbiAgbGFicyh0aXRsZSA9IFwiTsO6bWVybyDDs3B0aW1vIGRlIGNsdXN0ZXJzXCIpIn0=
+</script>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>Se escalan los datos (scale) para que todas las variables pesen igual. El «codo» está donde la curva deja de caer fuerte: aquí alrededor de K = 2 a 3.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="silueta-y-gap-statistic" class="slide level2">
+<h2>Silueta y <em>gap statistic</em></h2>
+<p><span class="eyebrow">Número óptimo de <em>clusters</em> · En R</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-20" class="exercise-cell">
+
+</div>
+<script type="webr-20-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBzaWxob3VldHRlIChudW1lcm8gbWFzIGFsdG8gbWVqb3IpXG5zZXQuc2VlZCgxMjMpXG5mdml6X25iY2x1c3QoeCA9IHNjYWxlKGRmKSwgRlVOY2x1c3RlciA9IGttZWFucyxcbiAgICAgICAgICAgICBtZXRob2QgPSBcInNpbGhvdWV0dGVcIiwgay5tYXggPSAxNSkgK1xuICBsYWJzKHRpdGxlID0gXCJOw7ptZXJvIMOzcHRpbW8gZGUgY2x1c3RlcnNcIikifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-21" class="exercise-cell">
+
+</div>
+<script type="webr-21-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBHYXAgc3RhdGlzdGljOiBOTyBlcyBlbCBtYXhpbW8gZGUgbGEgY3VydmE7XG4jIGxhIGxpbmVhIHB1bnRlYWRhIG1hcmNhIGVsIEsgZWxlZ2lkb1xuc2V0LnNlZWQoMTIzKVxuZnZpel9uYmNsdXN0KHggPSBzY2FsZShkZiksIEZVTmNsdXN0ZXIgPSBrbWVhbnMsXG4gICAgICAgICAgICAgbWV0aG9kID0gXCJnYXBfc3RhdFwiLCBrLm1heCA9IDE1KSArXG4gIGxhYnModGl0bGUgPSBcIk7Dum1lcm8gw7NwdGltbyBkZSBjbHVzdGVyc1wiKSJ9
+</script>
+</div>
+</div>
+</div></div>
+<p>Silueta: <span class="ojo"><strong>el <em>K</em> con el valor más alto</strong></span>. <em>Gap</em>: <span class="ojo"><strong>no se elige el máximo de la curva</strong></span> (en <em>iris</em> está en <em>K</em> = 13), sino el primer <em>K</em> cuyo <em>gap</em> no es claramente menor que el del siguiente, considerando su error estándar (regla «firstSEmax»). La línea punteada marca el <em>K</em> elegido: 2 en ambos.</p>
+</section>
+<section id="muchos-índices-a-la-vez-nbclust" class="slide level2">
+<h2>Muchos índices a la vez: <em>NbClust()</em></h2>
+<p><span class="eyebrow">Número óptimo de <em>clusters</em> · En R</span></p>
+<p><em>NbClust()</em> (paquete NbClust) calcula hasta 30 índices en un paso; cada uno <span class="ojo"><strong>«vota» por un número de <em>clusters</em></strong></span>: así se ve en qué valor coinciden más índices.</p>
+<div class="opciones">
+<p><strong>Argumento <code>index</code>:</strong> un índice (<code>"kl"</code>, <code>"ch"</code>, <code>"hartigan"</code>, <code>"silhouette"</code>, <code>"gap"</code>, <code>"dunn"</code>, …) o todos: <code>"all"</code> (todos excepto <em>gap</em>, <em>gamma</em>, <em>gplus</em> y <em>tau</em>, que son lentos) o <code>"alllong"</code> (todos).</p>
+</div>
+<div class="cell">
+<div>
+<div id="webr-22" class="exercise-cell">
+
+</div>
+<script type="webr-22-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo0LjYsImZpZy13aWR0aCI6N30sImNvZGUiOiIjID9OYkNsdXN0ICAgKHRhcmRhIHVub3MgMjAgcyBlbiBlbCBuYXZlZ2Fkb3IpXG5zZXQuc2VlZCgxMjMpXG5jbHVzdGVyczEgPC0gTmJDbHVzdChkYXRhID0gc2NhbGUoZGYpLCBkaXN0YW5jZSA9IFwiZXVjbGlkZWFuXCIsIG1pbi5uYyA9IDIsXG4gICAgICAgICAgICAgICAgICAgICBtYXgubmMgPSAxMCwgbWV0aG9kID0gXCJrbWVhbnNcIiwgaW5kZXggPSBcImFsbGxvbmdcIilcbiMgY3VhbnRvcyBpbmRpY2VzIFwidm90YW5cIiBwb3IgY2FkYSBudW1lcm8gZGUgY2x1c3RlcnNcbiMgKHNpbiBsb3Mgdm90b3MgMCA9IGluZGljZXMgZ3JhZmljb3MgeSAxID0gRnJleSBzaW4gc29sdWNpb24pXG52b3RvczEgPC0gY2x1c3RlcnMxJEJlc3QubmNbMSwgXVxudGFibGUodm90b3MxKVxuYmFycGxvdCh0YWJsZSh2b3RvczFbdm90b3MxID49IDJdKSwgbGFzID0gMSxcbiAgICAgICAgeGxhYiA9IFwiTsO6bWVybyBkZSBjbHVzdGVyc1wiLCB5bGFiID0gXCJOw7ptZXJvIGRlIMOtbmRpY2VzXCIpIn0=
+</script>
+</div>
+</div>
+<aside class="notes">
+<p>NbClust también imprime un resumen y dibuja los gráficos de los índices Hubert y D (se buscan los «codos»). Para iris gana K = 2 (13 índices), seguido de K = 3 (10). El original graficaba con fviz_nbclust(numero_clusters), que en versiones recientes de R da el error «the condition has length &gt; 1»; barplot(table(…$Best.nc[1, ])) hace el mismo gráfico de votos. Se dejan fuera los votos 0 (índices gráficos Hubert y D) y 1 (Frey sin solución), que NbClust no cuenta en su resumen.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="resultados-qué-flores-van-en-cada-grupo" class="slide level2">
+<h2>Resultados: ¿qué flores van en cada grupo?</h2>
+<p><span class="eyebrow">Práctico 13 · Resultados</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-23" class="exercise-cell">
+
+</div>
+<script type="webr-23-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBxdWUgb2JzZXJ2YWNpb25lcyBjb3JyZXNwb25kZW4gYSBjYWRhIGNsYXNlP1xud2hpY2goY2x1c3RlcnMxJEJlc3QucGFydGl0aW9uID09IDEpXG50YWJsZShjbHVzdGVyID0gY2x1c3RlcnMxJEJlc3QucGFydGl0aW9uLFxuICAgICAgZXNwZWNpZSA9IGlyaXMkU3BlY2llcykifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-24" class="exercise-cell">
+
+</div>
+<script type="webr-24-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBncmFmaWNvIGNvbiBjb2xvcmVzIHBvciBjbGFzZXNcbnBjYSA9IHByY29tcChkZiwgc2NhbGUgPSBUKVxuZnZpel9wY2FfaW5kKHBjYSxcbiAgICAgICAgICAgICB0aXRsZSA9IFwiUENBIC0gSXJpcyBkYXRhXCIsXG4gICAgICAgICAgICAgaGFiaWxsYWdlID0gY2x1c3RlcnMxJEJlc3QucGFydGl0aW9uLFxuICAgICAgICAgICAgIHBhbGV0dGUgPSBcImpjb1wiLFxuICAgICAgICAgICAgIGdlb20gPSBcInBvaW50XCIsXG4gICAgICAgICAgICAgZ2d0aGVtZSA9IHRoZW1lX2NsYXNzaWMoKSxcbiAgICAgICAgICAgICBsZWdlbmQgPSBcImJvdHRvbVwiKSJ9
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="por-qué-2-y-no-3" class="slide level2 tu-turno">
+<h2>¿Por qué 2 y no 3?</h2>
+<p><span class="eyebrow">Tu turno · Interpretar</span></p>
+<p><span class="tiempo">⏱ 3 min · en parejas</span></p>
+<p>Hay <strong>3 especies</strong> de iris, pero la silueta, el <em>gap</em> (con su regla, la línea punteada) y la mayoría de los índices de <em>NbClust</em> eligen <strong>2 <em>clusters</em></strong>.</p>
+<p><span class="pregunta"><strong>¿Por qué? ¿Está «mal» el <em>clustering</em>? Usen el PCA, el VAT y la tabla <em>cluster</em> × especie.</strong></span></p>
+<div class="fragment tarjeta">
+<p><em>Setosa</em> es muy distinta (pétalos chicos) y forma un grupo aparte; <em>versicolor</em> y <em>virginica</em> <span class="ojo"><strong>se sobreponen</strong></span> en las cuatro medidas. El <em>clustering</em> encuentra los grupos que <span class="clave"><strong>están en los datos</strong></span>, no los que nosotros conocemos: no está «mal», responde otra pregunta. Si sabemos que hay 3 especies, podemos fijar <em>K</em> = 3 (como en <code>kmeans1</code>), pero los grupos no serán perfectos.</p>
+</div>
+</section>
+<section id="completen-el-k-means" class="slide level2 tu-turno">
+<h2>Completen el K-means</h2>
+<p><span class="eyebrow">Tu turno · Completar el código</span></p>
+<p><span class="tiempo">⏱ 4 min</span></p>
+<p>Corran K-means con 3 grupos y 25 inicios, y comparen con las especies.</p>
+<div class="opciones">
+<p><strong><code>centers</code>:</strong> número de grupos, entero sin comillas (<code>2</code>, <code>3</code>, …). <strong><code>nstart</code>:</strong> número de inicios aleatorios, entero sin comillas (se recomienda entre <code>25</code> y <code>50</code>). <strong><code>table()</code>:</strong> dos vectores del mismo largo, p.&nbsp;ej. <code>km$cluster</code> y <code>iris$Species</code>.</p>
+</div>
+<div class="cell" data-exercise="ej_kmeans">
+<div>
+<div id="webr-25" class="exercise-cell">
+
+</div>
+<script type="webr-25-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImVqX2ttZWFucyIsImZpZy1oZWlnaHQiOiI1LjYiLCJmaWctd2lkdGgiOiI3In0sImNvZGUiOiJzZXQuc2VlZCgxMjMpXG5rbSA8LSBrbWVhbnMoc2NhbGUoZGYpLCBjZW50ZXJzID0gX19fX19fLCBuc3RhcnQgPSBfX19fX18pXG50YWJsZShjbHVzdGVyID0gX19fX19fLCBlc3BlY2llID0gaXJpcyRTcGVjaWVzKSJ9
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ej_kmeans">
+<p>El grupo de cada flor está en el elemento <code>cluster</code> del resultado: <code>km$cluster</code>.</p>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ej_kmeans">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a>km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(<span class="fu">scale</span>(df), <span class="at">centers =</span> <span class="dv">3</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">cluster =</span> km<span class="sc">$</span>cluster, <span class="at">especie =</span> iris<span class="sc">$</span>Species)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<p><span class="pregunta"><strong>¿Qué especie queda perfectamente separada? ¿Cuáles se confunden y cuántas flores?</strong></span></p>
+</div>
+<aside class="notes">
+<p>Respuesta: setosa queda sola (50 en un grupo). Versicolor y virginica se reparten entre los otros dos grupos: 39 versicolor + 14 virginica en uno y 11 versicolor + 36 virginica en el otro (25 flores mal asignadas).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="ordenación-clustering" class="title-slide slide level1 center" data-background-image="img/portada.jpg" data-background-opacity="0.5" data-background-color="#0F1B2A">
+<h1>Ordenación + <em>clustering</em></h1>
+<p><span class="eyebrow">Parte 4</span></p>
+</section>
+<section id="ordenación-clustering-1" class="slide level2">
+<h2>Ordenación + <em>clustering</em></h2>
+<p><span class="eyebrow">PCA y K-means</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><span class="clave"><strong>En general los algoritmos de <em>clustering</em> no funcionan bien con muchas variables. La combinación con métodos de ordenación es muy útil.</strong></span></p>
+<p><span class="ojo"><strong>Ejemplo:</strong></span> datos foliares de <span class="test"><strong>pigmentos (clorofila, carotenoides, contenido de agua, …)</strong></span> con <span class="test"><strong>datos hiperespectrales</strong></span> tomados por espectroscopia de campo (reflectancia = 2051 variables).</p>
+<p>Idea: <span class="concepto">reducir las 2051 bandas con un PCA y aplicar K-means sobre los primeros componentes.</span></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="img/mapas-hoja.png" class="figura" alt="Tres mapas de una misma hoja estimados a partir de datos hiperespectrales: parámetro de estructura foliar N, contenido de agua Cw y materia seca" height="620"></p>
+</div></div>
+<aside class="notes">
+<p>Datos: base ANGERS de propiedades ópticas de hojas (2003), la misma de la clase 10. Rasgos: Car = carotenoides, Cab = clorofila a+b, Cw = contenido de agua, Cm = materia seca, N = parámetro de estructura de la hoja.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="cargar-los-datos-de-hojas" class="slide level2">
+<h2>Cargar los datos de hojas</h2>
+<p><span class="eyebrow">Práctico 13 · Espectroscopia de campo</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-26" class="exercise-cell">
+
+</div>
+<script type="webr-26-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBkYXRvcyBkZSByYXNnb3MgZGUgaG9qYXMgKyByZWZsZWN0YW5jaWFcbmRhdGExIDwtIHJlYWQuY3N2KCdhbmdlcnNfbGVhZl9vcHRpY2FsXzIwMDMuY3N2JylcbiMgc29sYW1lbnRlIGxvcyBkYXRvcyBkZSByZWZsZWN0YW5jaWFcbmRhdGExIDwtIGRhdGExW2RhdGExJE1lYXN1cmVtZW50X3R5cGUgPT0gJ3JlZmxlY3RhbmNlJywgXVxuIyBvYnRlbmVyIGxvcyByYXNnb3MgeSBjYW1iaWFyIGVsIG5vbWJyZSBkZSBsYXMgY29sdW1uYXNcbnRyYWl0cyA8LSBkYXRhMVssIGMoMiwgNCwgNywgOSwgMTUpXVxuY29sbmFtZXModHJhaXRzKSA8LSBjKCdDYXInLCAnQ2FiJywgJ0N3JywgJ0NtJywgJ04nKVxuaGVhZCh0cmFpdHMpXG4jIG9idGVuZXIgbGEgcmVmbGVjdGFuY2lhXG5yZWZsZWMgPC0gZGF0YTFbLCAyMjpuY29sKGRhdGExKV0ifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="cell">
+<div>
+<div id="webr-27" class="exercise-cell">
+
+</div>
+<script type="webr-27-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBQQ0EgZGUgbGFzIDIwNTEgYmFuZGFzXG5wY2EgPC0gcHJjb21wKHJlZmxlYywgc2NhbGUgPSBUUlVFKVxubmFtZXMocGNhKSJ9
+</script>
+</div>
+</div>
+<p><span class="ojo"><strong>Ojo:</strong> este <code>pca</code> reemplaza al de <em>iris</em>.</span></p>
+</div></div>
+</section>
+<section id="nbclust-sobre-pc1-y-pc2" class="slide level2">
+<h2><em>NbClust</em> sobre PC1 y PC2</h2>
+<p><span class="eyebrow">Práctico 13 · <em>Cluster</em></span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-28" class="exercise-cell">
+
+</div>
+<script type="webr-28-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBudW1lcm8gaWRlYWwgZGUgY2x1c3RlcnMgc29icmUgbG9zIGRvcyBwcmltZXJvc1xuIyBjb21wb25lbnRlcy4gRW4gZWwgbmF2ZWdhZG9yIHVzYW1vcyBpbmRleCA9IFwiYWxsXCI6XG4jIGNvbiBcImFsbGxvbmdcIiAoY29tbyBlbiBlbCBwcmFjdGljbykgdGFyZGEgdmFyaW9zIG1pbnV0b3NcbnNldC5zZWVkKDEyMylcbmNsdXN0ZXJzMiA8LSBOYkNsdXN0KGRhdGEgPSBwY2EkeFssMToyXSwgZGlzdGFuY2UgPSBcImV1Y2xpZGVhblwiLFxuICAgICAgICAgICAgICAgICAgICAgbWluLm5jID0gMiwgbWF4Lm5jID0gMTAsXG4gICAgICAgICAgICAgICAgICAgICBtZXRob2QgPSBcImttZWFuc1wiLCBpbmRleCA9IFwiYWxsXCIpXG52b3RvczIgPC0gY2x1c3RlcnMyJEJlc3QubmNbMSwgXVxudGFibGUodm90b3MyKVxudGFibGUoY2x1c3RlcnMyJEJlc3QucGFydGl0aW9uKSJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="cell">
+<div>
+<div id="webr-29" class="exercise-cell">
+
+</div>
+<script type="webr-29-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjYsImZpZy13aWR0aCI6N30sImNvZGUiOiIjIGdyYWZpY28gZGUgdm90b3MgZGUgbG9zIGluZGljZXMgKHNpbiB2b3RvcyAwIHkgMSlcbmJhcnBsb3QodGFibGUodm90b3MyW3ZvdG9zMiA+PSAyXSksIGxhcyA9IDEsXG4gICAgICAgIHhsYWIgPSBcIk7Dum1lcm8gZGUgY2x1c3RlcnNcIixcbiAgICAgICAgeWxhYiA9IFwiTsO6bWVybyBkZSDDrW5kaWNlc1wiKSJ9
+</script>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>Con index = “alllong” (práctico, R en el computador) gana K = 2 con 6 índices y K = 3 tiene 5; con “all” quedan empatados 2 y 3 con 5 índices cada uno. En ambos casos la partición elegida es K = 2: 118 y 158 hojas. La decisión está reñida: es una buena oportunidad para discutir que los índices son orientativos.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="clusters-sobre-el-pca" class="slide level2">
+<h2><em>Clusters</em> sobre el PCA</h2>
+<p><span class="eyebrow">Práctico 13 · Plot</span></p>
+<div class="columns">
+<div class="column" style="width:45%;">
+<div class="cell">
+<div>
+<div id="webr-30" class="exercise-cell">
+
+</div>
+<script type="webr-30-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBhanVzdGEgdmVjdG9yZXMgYW1iaWVudGFsZXMgZW4gdW5hIG9yZGVuYWNpb25cbnNldC5zZWVkKDEyMylcbmVudiA8LSBlbnZmaXQocGNhLCB0cmFpdHMpXG5lbnYifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-31" class="exercise-cell">
+
+</div>
+<script type="webr-31-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoicGxvdChwY2EkeFssYygxLDIpXSwgY29sID0gY2x1c3RlcnMyJEJlc3QucGFydGl0aW9uLCBwY2ggPSAxNilcbnBsb3QoZW52KSJ9
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="qué-distingue-a-cada-grupo-de-hojas" class="slide level2 tu-turno">
+<h2>¿Qué distingue a cada grupo de hojas?</h2>
+<p><span class="eyebrow">Tu turno · Interpretar</span></p>
+<p><span class="tiempo">⏱ 3 min</span></p>
+<p>Con el gráfico y la tabla de <code>envfit</code> de la lámina anterior:</p>
+<p><span class="pregunta"><strong>Describan cada <em>cluster</em> de hojas usando los rasgos. ¿Qué rasgo separa mejor los dos grupos?</strong></span></p>
+<div class="fragment tarjeta">
+<p>Los grupos se separan a lo largo de <strong>PC1</strong>. Los vectores de <span class="ojo"><strong>Cw (contenido de agua, r² = 0,81) y Cm (materia seca, r² = 0,58)</strong></span> apuntan hacia el grupo de la izquierda: <span class="clave">hojas con más agua y materia seca (118 hojas)</span>; el grupo de la derecha tiene menos (158). <strong>N</strong> (r² = 0,89) apunta sobre todo a lo largo de PC2, así que varía <em>dentro</em> de cada grupo más que entre grupos.</p>
+</div>
+</section>
+<section id="turbera-de-chiloé-los-datos" class="slide level2">
+<h2>Turbera de Chiloé: los datos</h2>
+<p><span class="eyebrow">Práctico 13 · Turbera con NMDS</span></p>
+<p>Mediciones de <span class="ojo"><strong>carbono del suelo, biomasa aérea, riqueza y cobertura de especies</strong></span> en 36 parcelas de una turbera de Chiloé.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-32" class="exercise-cell">
+
+</div>
+<script type="webr-32-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiY29iX2RhdGEgPSByZWFkLmNzdignQ292ZXJfc3BwX3BlYXRsYW5kLmNzdicpXG52ZWdfZGF0YSA9IHJlYWQuY3N2KCdQZWF0bGFuZC5jc3YnKVxuIyBjb2JlcnR1cmEgKDAtMTAwKSBkZSBlc3BlY2llc1xuY29iX2RhdGFbMTo4LCAxOjRdXG5kaW0oY29iX2RhdGEpICAjIDM2IHBhcmNlbGFzOiBQbG90ICsgNDMgZXNwZWNpZXMifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-33" class="exercise-cell">
+
+</div>
+<script type="webr-33-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyB2ZWdldGFjaW9uIHkgc3VlbG8gKG1pc21hcyAzNiBwYXJjZWxhcylcbnZlZ19kYXRhWzE6OCwgNDo3XSJ9
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="nmds-cuántos-ejes" class="slide level2">
+<h2>NMDS: ¿cuántos ejes?</h2>
+<p><span class="eyebrow">Práctico 13 · Turbera con NMDS</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-34" class="exercise-cell">
+
+</div>
+<script type="webr-34-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBudW1lcm8gZGUgZGltZW5zaW9uZXMgKGspIHNlZ3VuIGVsIHN0cmVzc1xuc2V0LnNlZWQoMTIzKVxubm1kcy5zdHJlc3MgPC0gc2FwcGx5KDE6NiwgZnVuY3Rpb24oeClcbiAgbWV0YU1EUyhjb2JfZGF0YVssMjpuY29sKGNvYl9kYXRhKV0sIGRpc3RhbmNlPSdicmF5JyxcbiAgICAgICAgICBrID0geCwgdHJhY2UgPSAwKSRzdHJlc3MpXG5yb3VuZChubWRzLnN0cmVzcywgMykifQ==
+</script>
+</div>
+</div>
+<p>Valores de <em>stress</em> <span class="ojo"><strong>bajo 0,15 son deseables</strong></span>: seleccionamos <span class="clave"><strong>3 dimensiones</strong></span>.</p>
+</div><div class="column" style="width:45%;">
+<div class="cell">
+<div>
+<div id="webr-35" class="exercise-cell">
+
+</div>
+<script type="webr-35-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjYsImZpZy13aWR0aCI6N30sImNvZGUiOiJwbG90KDE6Niwgbm1kcy5zdHJlc3MsXG4gICAgIHhsYWIgPSBcIk7Dum1lcm8gZGUgZGltZW5zaW9uZXMgKGspXCIsXG4gICAgIHlsYWIgPSAnU3RyZXNzJylcbmFibGluZShoID0gMC4xNSwgbHR5ID0gMiwgY29sID0gXCJyZWRcIikifQ==
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="nmds-con-k-3-y-envfit" class="slide level2">
+<h2>NMDS con <em>k</em> = 3 y <em>envfit</em></h2>
+<p><span class="eyebrow">Práctico 13 · Turbera con NMDS</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-36" class="exercise-cell">
+
+</div>
+<script type="webr-36-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyB0cnltYXg6IG51bWVybyBtYXhpbW8gZGUgaW5pY2lvcyBhbGVhdG9yaW9zXG5zZXQuc2VlZCgxMjMpXG5ubWRzIDwtIG1ldGFNRFMoY29iX2RhdGFbLDI6NDRdLFxuICAgICAgICAgICAgICAgIGsgPSAzLFxuICAgICAgICAgICAgICAgIHRyeW1heCA9IDEwMDAsIHRyYWNlID0gMClcbm5tZHMkc3RyZXNzXG4jIGFqdXN0YXIgYWx0dXJhLCBiaW9tYXNhLCBjYXJib25vLCByaXF1ZXphXG5zZXQuc2VlZCgxMjMpXG5zcHBfZW52ID0gZW52Zml0KG5tZHMsIHZlZ19kYXRhWywgNDo3XSlcbnNwcF9lbnYifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-37" class="exercise-cell">
+
+</div>
+<script type="webr-37-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoib3JkaXBsb3Qobm1kcylcbnBsb3Qoc3BwX2VudikifQ==
+</script>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>Círculos negros: parcelas; cruces rojas: especies. Riqueza es la variable mejor ajustada (r² = 0,77); altura, biomasa y carbono también son significativas (r² ≈ 0,2).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="k-means-sobre-el-nmds" class="slide level2">
+<h2>K-means sobre el NMDS</h2>
+<p><span class="eyebrow">Práctico 13 · K-means</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-38" class="exercise-cell">
+
+</div>
+<script type="webr-38-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBzZWxlY2Npb25hciBudW1lcm8gb3B0aW1vIGRlIGNsdXN0ZXJzXG5zZXQuc2VlZCgxMjMpXG5jbHVzdGVyczMgPC0gTmJDbHVzdChkYXRhID0gc2NvcmVzKG5tZHMpJHNpdGVzLFxuICAgICAgICAgICAgICAgICAgICAgZGlzdGFuY2UgPSBcImV1Y2xpZGVhblwiLFxuICAgICAgICAgICAgICAgICAgICAgbWluLm5jID0gMiwgbWF4Lm5jID0gMTAsXG4gICAgICAgICAgICAgICAgICAgICBtZXRob2QgPSBcImttZWFuc1wiLCBpbmRleCA9IFwiYWxsbG9uZ1wiKVxudm90b3MzIDwtIGNsdXN0ZXJzMyRCZXN0Lm5jWzEsIF1cbnRhYmxlKHZvdG9zMylcbnRhYmxlKGNsdXN0ZXJzMyRCZXN0LnBhcnRpdGlvbikifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="cell">
+<div>
+<div id="webr-39" class="exercise-cell">
+
+</div>
+<script type="webr-39-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjYsImZpZy13aWR0aCI6N30sImNvZGUiOiJiYXJwbG90KHRhYmxlKHZvdG9zM1t2b3RvczMgPj0gMl0pLCBsYXMgPSAxLFxuICAgICAgICB4bGFiID0gXCJOw7ptZXJvIGRlIGNsdXN0ZXJzXCIsXG4gICAgICAgIHlsYWIgPSBcIk7Dum1lcm8gZGUgw61uZGljZXNcIikifQ==
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="asociaciones-vegetacionales" class="slide level2">
+<h2>Asociaciones vegetacionales</h2>
+<p><span class="eyebrow">Práctico 13 · Plot con clases</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-40" class="exercise-cell">
+
+</div>
+<script type="webr-40-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoiIyBLLW1lYW5zIHVzbyBsYXMgMyBkaW1lbnNpb25lczogbWlyZW5cbiMgdGFtYmllbiBsb3MgZWplcyAxIHkgMyAoYygxLCAzKSlcbnBsb3Qoc2NvcmVzKG5tZHMpJHNpdGVzWywgMToyXSxcbiAgICAgY29sID0gY2x1c3RlcnMzJEJlc3QucGFydGl0aW9uLCBwY2ggPSAxNilcbnBsb3Qoc3BwX2VudikifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-41" class="exercise-cell">
+
+</div>
+<script type="webr-41-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBwcm9tZWRpbyBkZSBjYWRhIHZhcmlhYmxlIGVuIGNhZGEgZ3J1cG9cbmFnZ3JlZ2F0ZSh2ZWdfZGF0YVssIDQ6N10sXG4gICAgICAgICAgYnkgPSBsaXN0KGNsdXN0ZXIgPSBjbHVzdGVyczMkQmVzdC5wYXJ0aXRpb24pLFxuICAgICAgICAgIEZVTiA9IG1lYW4pIn0=
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="describan-las-asociaciones" class="slide level2 tu-turno">
+<h2>Describan las asociaciones</h2>
+<p><span class="eyebrow">Tu turno · Interpretar</span></p>
+<p><span class="tiempo">⏱ 4 min · en parejas</span></p>
+<p>Con el gráfico y la tabla de promedios por grupo de la lámina anterior:</p>
+<p><span class="pregunta"><strong>Pónganle un nombre a cada uno de los 4 grupos de parcelas. ¿Cuál guardaría más carbono? ¿Cuál es más diverso?</strong></span></p>
+<div class="fragment tarjeta">
+<p>Grupo 1: vegetación <span class="ojo"><strong>alta, con más biomasa (1,7) y carbono (14,8)</strong></span>. Grupo 2: biomasa baja y el <span class="ojo"><strong>menor carbono (8,3)</strong></span>. Grupos 3 y 4: vegetación baja, con la <span class="ojo"><strong>mayor riqueza (12 especies)</strong></span>; el 4 es el más bajo (12 cm). <span class="clave">Cada <em>cluster</em> es una asociación vegetacional que se puede describir con las variables medidas.</span></p>
+</div>
+</section>
+<section id="qué-especies-hay-en-cada-grupo" class="slide level2">
+<h2>¿Qué especies hay en cada grupo?</h2>
+<p><span class="eyebrow">Práctico 13 · Interpretación</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-42" class="exercise-cell">
+
+</div>
+<script type="webr-42-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBjb29yZGVuYWRhcyBkZSBsYXMgZXNwZWNpZXNcbmhlYWQobm1kcyRzcGVjaWVzKVxuIyBjb21wb3NpY2lvbiBkZSBlc3BlY2llcyBlbiBlbCBwcmltZXIgZWplXG5zb3J0KG5tZHMkc3BlY2llc1ssMV0pIn0=
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>Las especies con valores <span class="ojo"><strong>negativos en el eje 1</strong></span> (<em>Philesia</em>, <em>Uncinia</em>, <em>Sticherus</em>…) están del lado de altura y biomasa; las <span class="ojo"><strong>positivas</strong></span> (<em>Prunella</em>, <em>Leptinella</em>, <em>Anagallis</em>…) del lado de la riqueza.</p>
+<p><span class="clave">Con esto se puede deducir qué especies dominantes corresponden a cada asociación y cuáles tienen, por ejemplo, más carbono y altura de canopia.</span></p>
+<p>Prueben: <code>sort(nmds$species[,2])</code>.</p>
+</div></div>
+</section>
+<section id="desafío-pingüinos" class="slide level2 tu-turno scrollable">
+<h2>Desafío: pingüinos</h2>
+<p><span class="eyebrow">Tu turno · Aplicar</span></p>
+<p><span class="tiempo">⏱ 10 min · en parejas</span></p>
+<p><code>penguins</code> (incluido en R): largo y alto del pico, largo de la aleta y masa corporal de 342 pingüinos de 3 especies (Adelie, Chinstrap, Gentoo) del archipiélago Palmer, Antártica.</p>
+<div class="opciones">
+<p><strong><code>method</code>:</strong> <code>"wss"</code> (codo) · <code>"silhouette"</code> (silueta) · <code>"gap_stat"</code> (<em>gap</em>), entre comillas. <strong><code>centers</code>:</strong> un número entero sin comillas, el <em>K</em> que elijan con el paso 2. <strong>Hopkins:</strong> <em>H</em> cercano a 1 = agrupable.</p>
+</div>
+<div class="cell" data-exercise="ej_pinguinos">
+<div>
+<div id="webr-43" class="exercise-cell">
+
+</div>
+<script type="webr-43-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImVqX3Bpbmd1aW5vcyIsImZpZy1oZWlnaHQiOjQuNiwiZmlnLXdpZHRoIjo3fSwiY29kZSI6InAgPC0gbmEub21pdChwZW5ndWluc1ssIGMoXCJzcGVjaWVzXCIsIFwiYmlsbF9sZW5cIiwgXCJiaWxsX2RlcFwiLCBcImZsaXBwZXJfbGVuXCIsIFwiYm9keV9tYXNzXCIpXSlcblggPC0gc2NhbGUocFssIC0xXSlcbiMgMS4gwr9zb24gYWdydXBhYmxlcz9cbnNldC5zZWVkKDEyMylcbmhvcGtpbnM6OmhvcGtpbnMoWCwgbSA9IDUwKVxuIyAyLiBudW1lcm8gZGUgY2x1c3RlcnNcbnNldC5zZWVkKDEyMylcbmZ2aXpfbmJjbHVzdChYLCBrbWVhbnMsIG1ldGhvZCA9IF9fX19fXywgay5tYXggPSAxMClcbiMgMy4gSy1tZWFucyBjb24gZWwgSyBlbGVnaWRvIHkgY29tcGFyYXIgY29uIGxhcyBlc3BlY2llc1xuc2V0LnNlZWQoMTIzKVxua20gPC0ga21lYW5zKFgsIGNlbnRlcnMgPSBfX19fX18sIG5zdGFydCA9IDI1KVxudGFibGUoY2x1c3RlciA9IGttJGNsdXN0ZXIsIGVzcGVjaWUgPSBwJHNwZWNpZXMpIn0=
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ej_pinguinos">
+<p>Usen la silueta (<code>"silhouette"</code>): elijan el <em>K</em> con el valor más alto. Prueben también con el número de especies.</p>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ej_pinguinos">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(penguins[, <span class="fu">c</span>(<span class="st">"species"</span>, <span class="st">"bill_len"</span>, <span class="st">"bill_dep"</span>, <span class="st">"flipper_len"</span>, <span class="st">"body_mass"</span>)])</span>
+<span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">scale</span>(p[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a>hopkins<span class="sc">::</span><span class="fu">hopkins</span>(X, <span class="at">m =</span> <span class="dv">50</span>)          <span class="co"># ~0.98: agrupable</span></span>
+<span id="cb2-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb2-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_nbclust</span>(X, kmeans, <span class="at">method =</span> <span class="st">"silhouette"</span>, <span class="at">k.max =</span> <span class="dv">10</span>)   <span class="co"># K = 2</span></span>
+<span id="cb2-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb2-8"><a href="" aria-hidden="true" tabindex="-1"></a>km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(X, <span class="at">centers =</span> <span class="dv">2</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb2-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">cluster =</span> km<span class="sc">$</span>cluster, <span class="at">especie =</span> p<span class="sc">$</span>species)</span>
+<span id="cb2-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># K = 2: Gentoo sola; Adelie + Chinstrap juntas.</span></span>
+<span id="cb2-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># con centers = 3: Gentoo perfecta; Adelie y Chinstrap se mezclan en parte</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="pregunta"><strong>Escriban 2–3 líneas: ¿cuántos grupos hay en los datos y por qué no coinciden del todo con las especies?</strong></span></p>
+<aside class="notes">
+<p>Respuesta esperada: Hopkins ≈ 0,98 (agrupable). La silueta elige K = 2 (0,53); NbClust con index = “all” elige K = 3 (11 índices). Con K = 2: Gentoo (123) sola y Adelie + Chinstrap juntas. Con K = 3: Gentoo perfecta, y Adelie (127) y Chinstrap (63) separadas en su mayoría, con 24 Adelie y 5 Chinstrap cruzadas. Igual que iris: Adelie y Chinstrap tienen cuerpos parecidos (difieren sobre todo en el pico).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="resumen" class="slide level2">
+<h2>Resumen</h2>
+<p><span class="eyebrow">Cierre</span></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 37%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paso</th>
+<th>Pregunta</th>
+<th>En R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 · Tendencia</td>
+<td>¿Hay grupos o los datos son al azar?</td>
+<td><code>hopkins::hopkins()</code>, <code>fviz_dist(dist(X))</code></td>
+</tr>
+<tr class="even">
+<td>2 · Número de <em>clusters</em></td>
+<td>¿Cuántos grupos?</td>
+<td><code>fviz_nbclust()</code>, <code>NbClust()</code></td>
+</tr>
+<tr class="odd">
+<td>3 · Agrupar</td>
+<td>¿Qué observación va en cada grupo?</td>
+<td><code>kmeans(X, centers, nstart = 25)</code></td>
+</tr>
+<tr class="even">
+<td>4 · Interpretar</td>
+<td>¿Qué distingue a cada grupo?</td>
+<td>ordenación + <code>envfit()</code>, <code>aggregate()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="tarjeta alerta">
+<p><span class="test"><strong>Con muchas variables: primero ordenar (PCA, NMDS), luego agrupar sobre los ejes.</strong></span> Escalen los datos, fijen la semilla y revisen si su función entrega <em>H</em> o 1 − <em>H</em>. Todo el código está en <code>Practicos/13_multivariante2.R</code>.</p>
+</div>
+</section>
+<section id="ticket-de-salida" class="slide level2 tu-turno scrollable">
+<h2>Ticket de salida</h2>
+<p><span class="eyebrow">Tu turno · Cierre</span></p>
+<p><span class="tiempo">⏱ 3 min · individual</span></p>
+<p><span class="pregunta"><strong>Respondan en una línea cada una:</strong></span></p>
+<ol type="1">
+<li>Un compañero obtiene <em>H</em> = 0,15 con una función de Hopkins y concluye que sus datos no son agrupables. ¿Qué le preguntarían?</li>
+<li>¿Por qué se usa <code>nstart = 25</code> en <code>kmeans()</code>?</li>
+<li>Tienen coberturas de 120 especies en 50 parcelas y quieren encontrar comunidades vegetales. ¿Qué pasos siguen?</li>
+</ol>
+<div class="fragment tarjeta">
+<ol type="1">
+<li>¿Qué entrega la función, <em>H</em> o 1 − <em>H</em>? Con 1 − <em>H</em>, 0,15 indica datos <strong>agrupables</strong>. 2. Porque el resultado depende del inicio aleatorio: se repite 25 veces y se queda con la menor varianza interna. 3. Bray-Curtis → <strong>NMDS</strong> (elegir <em>k</em> por <em>stress</em>) → número de <em>clusters</em> (<code>NbClust</code>) → <strong>K-means</strong> sobre los ejes → interpretar con <code>envfit</code> y promedios por grupo.</li>
+</ol>
+</div>
+</section>
+<section id="tu-espacio" class="slide level2">
+<h2>Tu espacio</h2>
+<p><span class="eyebrow">R en el navegador · Libre</span></p>
+<p>Escriban y ejecuten su propio código. La sesión de R es la misma de toda la clase: <span class="ojo"><code>df</code>, <code>random_df</code>, <code>kmeans1</code>, <code>clusters1</code>, <code>traits</code>, <code>reflec</code>, <code>cob_data</code>, <code>veg_data</code> y <code>nmds</code></span> ya están cargados.</p>
+<div class="cell">
+<div>
+<div id="webr-44" class="exercise-cell">
+
+</div>
+<script type="webr-44-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjYsImZpZy13aWR0aCI6OX0sImNvZGUiOiIjIHN1IGPDs2RpZ28gYXF1w60ifQ==
+</script>
+</div>
+</div>
+<aside class="notes">
+<p>Celda libre para preguntas o pruebas en vivo. Ctrl/Cmd + Enter ejecuta; Start Over la deja en blanco.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC42LjAvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsInZlZ2FuIiwiZmFjdG9leHRyYSIsIk5iQ2x1c3QiLCJob3BraW5zIiwiY2x1c3RlcnRlbmQiXSwicmVwb3MiOltdfSwicmVuZGVyX2RmIjoiZGVmYXVsdCJ9
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00NCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00NCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQ0ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNDQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00NC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV80NCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNDQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00MyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00MyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQzID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNDMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici00My1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzQzID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl80Mywge30pO1xuX3dlYnJfZmVlZGJhY2tfNDMgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzQzLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00MiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00MiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNDItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00Mi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV80MiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNDIsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00MSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00MSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQxID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNDEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00MS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV80MSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNDEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00MCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00MCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNDAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00MC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV80MCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNDAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzk7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM5ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzktY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zOSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzksIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM4ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zOC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzgsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM3ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zNy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zNyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM2ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zNiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzYsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM1ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zNS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzUsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM0ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zNC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zNCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMzID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zMyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzMsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzIsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMxID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zMC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zMCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjk7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI5ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjktY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yOSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjksIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI4ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yOC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjgsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI3ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yNy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yNyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI2ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yNiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjYsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI1ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0yNS1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzI1ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yNSwge30pO1xuX3dlYnJfZmVlZGJhY2tfMjUgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzI1LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI0ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yNC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yNCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIzID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yMyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjMsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjIsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIxID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yMC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yMCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTk7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE5ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTktY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xOSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTksIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE4ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xOC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTgsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE3ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xNy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xNyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE2ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xNiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTYsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE1ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xNS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTUsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE0ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xNC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xNCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEzID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTMsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTIsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzExID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC05IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV85O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzkgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici05LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV85ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl85LCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfODtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTgiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl84ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItOC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTgtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfOCwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTciLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici03IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNyA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici03LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzcgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV82ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl82LCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl81ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTUtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNSwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTQiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNCA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzQgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8zLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8yID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTItY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMiwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTEiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6Il93ZWJyX3ZhbHVlXzEgPSB7XG4gIGNvbnN0IHsgaGlnaGxpZ2h0UiwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXZhbHVhdGlvbiBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHtcbiAgICBpZDogXCJ3ZWJyLTEtY29udGVudHNcIixcbiAgICBlY2hvOiB0cnVlLFxuICAgIG91dHB1dDogdHJ1ZVxuICB9LCBibG9jay5hdHRyKTtcblxuICAvLyBFdmFsdWF0ZSB0aGUgcHJvdmlkZWQgUiBjb2RlXG4gIGNvbnN0IHJlc3VsdCA9IHdlYlJPanMucHJvY2Vzcyh7Y29kZTogYmxvY2suY29kZSwgb3B0aW9uc30sIHt9KTtcblxuICAvLyBFYXJseSB5aWVsZCB3aGlsZSB3ZSB3YWl0IGZvciB0aGUgZmlyc3QgZXZhbHVhdGlvbiBhbmQgcmVuZGVyXG4gIGlmIChvcHRpb25zLm91dHB1dCAmJiAhKFwiMVwiIGluIHdlYlJPanMucmVuZGVyZWRPanMpKSB7XG4gICAgY29uc3QgY29udGFpbmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKTtcbiAgICBjb25zdCBzcGlubmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKTtcblxuICAgIGlmIChvcHRpb25zLmVjaG8pIHtcbiAgICAgIC8vIFNob3cgb3V0cHV0IGFzIGhpZ2hsaWdodGVkIHNvdXJjZVxuICAgICAgY29uc3QgcHJlRWxlbSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJwcmVcIik7XG4gICAgICBjb250YWluZXIuY2xhc3NOYW1lID0gXCJzb3VyY2VDb2RlXCI7XG4gICAgICBwcmVFbGVtLmNsYXNzTmFtZSA9IFwic291cmNlQ29kZSByXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKGhpZ2hsaWdodFIoYmxvY2suY29kZSkpO1xuICAgICAgc3Bpbm5lci5jbGFzc05hbWUgPSBcInNwaW5uZXItZ3JvdyBzcGlubmVyLWdyb3ctc20gbS0yIHBvc2l0aW9uLWFic29sdXRlIHRvcC0wIGVuZC0wXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKHNwaW5uZXIpO1xuICAgICAgY29udGFpbmVyLmFwcGVuZENoaWxkKHByZUVsZW0pO1xuICAgIH0gZWxzZSB7XG4gICAgICBzcGlubmVyLmNsYXNzTmFtZSA9IFwic3Bpbm5lci1ib3JkZXIgc3Bpbm5lci1ib3JkZXItc21cIjtcbiAgICAgIGNvbnRhaW5lci5hcHBlbmRDaGlsZChzcGlubmVyKTtcbiAgICB9XG5cbiAgICB5aWVsZCBjb250YWluZXI7XG4gIH1cblxuICB3ZWJST2pzLnJlbmRlcmVkT2pzW1wiMVwiXSA9IHRydWU7XG4gIHlpZWxkIGF3YWl0IHJlc3VsdDtcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ3ZWJST2pzID0ge1xuICBjb25zdCB7IFdlYlIsIENoYW5uZWxUeXBlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lLldlYlI7XG4gIGNvbnN0IHtcbiAgICBXZWJSRXZhbHVhdG9yLFxuICAgIFdlYlJFbnZpcm9ubWVudE1hbmFnZXIsXG4gICAgc2V0dXBSLFxuICAgIGI2NERlY29kZSxcbiAgICBjb2xsYXBzZVBhdGhcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIHdlYlIgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgLy8gSW5pdGlhbGlzZSB3ZWJSIGFuZCBzZXR1cCBmb3IgUiBjb2RlIGV2YWx1YXRpb25cbiAgbGV0IHdlYlJQcm9taXNlID0gKGFzeW5jICh3ZWJSKSA9PiB7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIC8vIEluc3RhbGwgcHJvdmlkZWQgbGlzdCBvZiBwYWNrYWdlc1xuICAgIC8vIEVuc3VyZSB3ZWJSIGRlZmF1bHQgcmVwbyBpcyBpbmNsdWRlZFxuICAgIGRhdGEucGFja2FnZXMucmVwb3MucHVzaChcImh0dHBzOi8vcmVwby5yLXdhc20ub3JnXCIpXG4gICAgYXdhaXQgZGF0YS5wYWNrYWdlcy5wa2dzLm1hcCgocGtnKSA9PiAoKSA9PiB7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgICB3ZWJyOjppbnN0YWxsKHBrZywgcmVwb3MgPSByZXBvcylcbiAgICAgICAgbGlicmFyeShwa2csIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSlcbiAgICAgIGAsIHsgZW52OiB7XG4gICAgICAgIHBrZzogcGtnLFxuICAgICAgICByZXBvczogZGF0YS5wYWNrYWdlcy5yZXBvcyxcbiAgICAgIH19KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICBjb25zdCBhbmFseXNpcyA9IGF3YWl0IHdlYlIuRlMuYW5hbHl6ZVBhdGgocGF0aCk7XG4gICAgICAgIGlmICghYW5hbHlzaXMuZXhpc3RzKSB7XG4gICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yOiBcIiR7ZS5tZXNzYWdlfVwiLmApO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH0pKG5ldyBXZWJSKGRhdGEub3B0aW9ucykpO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgd2ViUlByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIHdlYlJQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIn1dfQ==
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJhbmdlcnNfbGVhZl9vcHRpY2FsXzIwMDMuY3N2IiwiQ292ZXJfc3BwX3BlYXRsYW5kLmNzdiIsIlBlYXRsYW5kLmNzdiJd
+</script>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="img/logo-CTE.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>Bioestadística · Clase 11 · Estadística multivariante 2</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="clase11_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="clase11_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="clase11_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="clase11_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="clase11_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="clase11_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="clase11_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="clase11_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="clase11_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="clase11_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'fast',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+
+        height: 1080,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script>
+    // webR no funciona abriendo el .html como archivo (file://): avisar cómo abrirlo
+    if (location.protocol === 'file:') {
+      document.addEventListener('DOMContentLoaded', function () {
+        var d = document.createElement('div');
+        d.textContent = 'El código de R no puede ejecutarse abriendo el archivo directamente. Abran la presentación con un servidor local: en la carpeta del curso, ./presentar 11';
+        d.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#C62828;color:#fff;font:600 20px "IBM Plex Sans",sans-serif;padding:12px 24px;text-align:center';
+        document.body.appendChild(d);
+      });
+    }
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../..";
+    window._ojs.paths.docToRoot = "";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copiado");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copiado");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
