@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<script src="clase12_files/libs/clipboard/clipboard.min.js"></script>
+<script src="clase12_files/libs/quarto-html/tabby.min.js"></script>
+<script src="clase12_files/libs/quarto-html/popper.min.js"></script>
+<script src="clase12_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="clase12_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="clase12_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="clase12_files/libs/quarto-html/quarto-syntax-highlighting-38902dcd73e7f8352ecceb5e549548c1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="clase12_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="clase12_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
+
+  <meta name="author" content="Prof.&nbsp;Javier Lopatin · javier.lopatin@uai.cl">
+  <title>MANOVA, PERMANOVA y series de tiempo</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="clase12_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="clase12_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #d8dee9; background-color: #2e3440; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #d8dee9; } /* Normal */
+    code span.al { color: #bf616a; background-color: #3b4252; font-weight: bold; } /* Alert */
+    code span.an { color: #d08770; } /* Annotation */
+    code span.at { color: #8fbcbb; } /* Attribute */
+    code span.bn { color: #b48ead; } /* BaseN */
+    code span.bu { color: #88c0d0; font-style: italic; } /* BuiltIn */
+    code span.cf { color: #81a1c1; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #ebcb8b; } /* Char */
+    code span.cn { color: #eceff4; font-weight: bold; } /* Constant */
+    code span.co { color: #616e88; } /* Comment */
+    code span.cv { color: #e5e9f0; } /* CommentVar */
+    code span.do { color: #5e81ac; } /* Documentation */
+    code span.dt { color: #81a1c1; } /* DataType */
+    code span.dv { color: #b48ead; } /* DecVal */
+    code span.er { color: #bf616a; text-decoration: underline; } /* Error */
+    code span.ex { color: #8fbcbb; font-weight: bold; } /* Extension */
+    code span.fl { color: #b48ead; } /* Float */
+    code span.fu { color: #88c0d0; } /* Function */
+    code span.im { color: #a3be8c; } /* Import */
+    code span.in { color: #ebcb8b; } /* Information */
+    code span.kw { color: #81a1c1; font-weight: bold; } /* Keyword */
+    code span.op { color: #81a1c1; } /* Operator */
+    code span.ot { color: #8fbcbb; } /* Other */
+    code span.pp { color: #5e81ac; } /* Preprocessor */
+    code span.re { color: #88c0d0; background-color: #3b4252; } /* RegionMarker */
+    code span.sc { color: #ebcb8b; } /* SpecialChar */
+    code span.ss { color: #d08770; } /* SpecialString */
+    code span.st { color: #a3be8c; } /* String */
+    code span.va { color: #5e81ac; } /* Variable */
+    code span.vs { color: #a3be8c; } /* VerbatimString */
+    code span.wa { color: #bf616a; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="clase12_files/libs/revealjs/dist/theme/quarto-2b40617c062425be63de9e889db1e37f.css">
+  <link href="clase12_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="clase12_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="clase12_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="clase12_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="clase12_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="clase12_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-color="#0F1B2A" data-background-image="img/portada.jpg" data-background-opacity="0.55" data-background-size="cover" class="quarto-title-block center">
+  <h1 class="title">MANOVA, PERMANOVA y series de tiempo</h1>
+  <p class="subtitle">Bioestadística · Clase 12</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Prof.&nbsp;Javier Lopatin · javier.lopatin@uai.cl
+</div>
+</div>
+</div>
+
+</section>
+<section id="hoy" class="slide level2">
+<h2>Hoy</h2>
+<p><span class="eyebrow">Clase 12</span></p>
+<div class="cell">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImZpZy1oZWlnaHQiOiI1LjYiLCJmaWctd2lkdGgiOiI3IiwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2V9LCJjb2RlIjoib3B0aW9ucyh3aWR0aCA9IDcwKVxuc3VwcHJlc3NQYWNrYWdlU3RhcnR1cE1lc3NhZ2VzKHtcbiAgbGlicmFyeSh2ZWdhbik7IGxpYnJhcnkobmxtZSk7IGxpYnJhcnkobG10ZXN0KVxuICBsaWJyYXJ5KHRzZXJpZXMpOyBsaWJyYXJ5KHpvbyk7IGxpYnJhcnkoZm9yZWNhc3QpXG59KVxuXG4jIHByw6FjdGljbyAxNCBlbiBzZWd1bmRvIHBsYW5vOiBkZWphIGxpc3RvcyBsb3Mgb2JqZXRvcyAoZmlsbSwgbW9kZWwsIGRhdGEsXG4jIGRpc192ZWcsIGJkaXNwX3ZlZywgZmxpZXMsIGZpdCwgdGVtcHMsIHRlbXAsIGxsdXZpYSwgdHJhaW4sIHRlc3QsIC4uLikgcGFyYVxuIyBxdWUgY3VhbHF1aWVyIGNlbGRhIHZpc2libGUgZnVuY2lvbmUgYXVucXVlIG5vIHNlIGhheWFuIGVqZWN1dGFkbyBsYXNcbiMgYW50ZXJpb3Jlcy4gU2luIGdyw6FmaWNvcyBuaSBtb2RlbG9zIGxlbnRvcy5cbmxvY2FsKHtcbiAgZmlsbSA8LSByZWFkLnRhYmxlKFwibWFub3ZhX2ZpbG1fcGxhc3RpY28udHh0XCIsIGhlYWRlciA9IFRSVUUsIHN0cmluZ3NBc0ZhY3RvcnMgPSBUUlVFKVxuICBtb2RlbCA8LSBtYW5vdmEoY2JpbmQodGVhciwgZ2xvc3MsIG9wYWNpdHkpIH4gcmF0ZSAqIGFkZGl0aXZlLCBkYXRhID0gZmlsbSlcbiAgZGF0YSA8LSByZWFkLmNzdignZGF0YS5jc3YnLCBzZXAgPSAnLCcsIGRlYyA9ICcsJywgc3RyaW5nc0FzRmFjdG9ycyA9IFRSVUUpXG4gIHZhciA8LSBzY2FsZShkYXRhWywgNDoyMF0pXG4gIGRpc192ZWcgPC0gZGlzdCh2YXIpXG4gIGdyb3VwcyA8LSBkYXRhJHBpc29cbiAgYmRpc3BfdmVnIDwtIGJldGFkaXNwZXIoZGlzX3ZlZywgZ3JvdXBzKVxuICBIU0RfdmVnIDwtIFR1a2V5SFNEKGJkaXNwX3ZlZylcbiAgYmxvd2ZseSA8LSByZWFkLnRhYmxlKFwiYmxvd2ZseS50eHRcIiwgaGVhZGVyID0gVFJVRSwgbnJvd3MgPSAzNjApXG4gIGZsaWVzIDwtIHRzKGJsb3dmbHkkZmxpZXMpXG4gIHNlbWFuYSA8LSBzZXFfYWxvbmcoZmxpZXMpXG4gIGZpdCA8LSBsbShmbGllcyB+IHNlbWFuYSlcbiAgZml0X2dscyA8LSBnbHMoZmxpZXMgfiBzZW1hbmEsIGNvcnJlbGF0aW9uID0gY29yQVIxKCkpXG4gIGRmbGllcyA8LSBkaWZmKGZsaWVzKVxuICB0ZW1wZXJhdHVyZSA8LSByZWFkLnRhYmxlKFwidGVtcC50eHRcIiwgaGVhZGVyID0gVFJVRSlcbiAgdGVtcHMgPC0gdHModGVtcGVyYXR1cmUkdGVtcHMsIGZyZXF1ZW5jeSA9IDEyKVxuICB3ZWF0aGVyIDwtIHJlYWQudGFibGUoXCJTaWx3b29kV2VhdGhlci50eHRcIiwgaGVhZGVyID0gVFJVRSlcbiAgdXBwZXIgPC0gd2VhdGhlciR1cHBlclxuICB0ZW1wIDwtIHRzKGFzLnZlY3Rvcih0YXBwbHkodXBwZXIsIGxpc3Qod2VhdGhlciRtb250aCwgd2VhdGhlciR5ciksIG1lYW4pKSxcbiAgICAgICAgICAgICBzdGFydCA9IGMoMTk4NywgMSksIGZyZXF1ZW5jeSA9IDEyKVxuICB0aW1lIDwtICgxOjY5NDApIC8gMzY1LjI2MzJcbiAgbGx1dmlhIDwtIHRzKGFzLnZlY3Rvcih0YXBwbHkod2VhdGhlciRyYWluLCBsaXN0KHdlYXRoZXIkbW9udGgsIHdlYXRoZXIkeXIpLCBzdW0pKSxcbiAgICAgICAgICAgICAgIHN0YXJ0ID0gYygxOTg3LCAxKSwgZnJlcXVlbmN5ID0gMTIpXG4gIGFub21hbGlhIDwtIGZ1bmN0aW9uKHgpIHggLSBhdmUoeCwgY3ljbGUoeCkpXG4gIGhpZ2ggPC0gdHModXBwZXIsIHN0YXJ0ID0gYygxOTg3LCAxKSwgZnJlcXVlbmN5ID0gMzY1KVxuICB0cmFpbiA8LSB3aW5kb3codGVtcCwgZW5kID0gYygyMDAzLCAxMikpXG4gIHRlc3QgIDwtIHdpbmRvdyh0ZW1wLCBzdGFydCA9IGMoMjAwNCwgMSkpXG4gIGZvciAoeCBpbiBscygpKSBhc3NpZ24oeCwgZ2V0KHgpLCBlbnZpciA9IGdsb2JhbGVudigpKVxufSkifQ==
+</script>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Parte 1 · Comparar grupos multivariantes</span> Varias respuestas a la vez: <span class="test"><strong>MANOVA</strong></span>, <span class="test"><strong>PERMANOVA</strong></span> y <span class="test"><strong>betadisper</strong></span> (su supuesto).</p>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Parte 2 · Series de tiempo</span> Tendencia, <span class="concepto"><strong>autocorrelación</strong></span>, estacionariedad, ciclos, correlación cruzada y <span class="concepto"><strong>pronóstico evaluado</strong></span>.</p>
+</div>
+</div></div>
+<p><span class="grande">La idea que une la clase: <span class="clave"><strong>las observaciones no siempre son independientes</strong></span>, y eso cambia cómo se analizan.</span></p>
+<aside class="notes">
+<p>Esta versión de la clase está hecha con Quarto: las figuras de teoría se generaron con R al crear la presentación y todo el código del práctico 14 corre en el navegador (webR): se ejecuta con Run Code y se puede editar. Debe abrirse con un servidor local (./presentar 12), no con doble clic en el .html. La primera carga tarda alrededor de medio minuto (vegan, nlme, forecast y sus dependencias se descargan al navegador).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section>
+<section id="comparar-grupos-multivariantes" class="title-slide slide level1 center" data-background-image="img/portada.jpg" data-background-opacity="0.5" data-background-color="#0F1B2A">
+<h1>Comparar grupos multivariantes</h1>
+<p><span class="eyebrow">Parte 1 · MANOVA · PERMANOVA · betadisper</span></p>
+</section>
+<section id="varias-respuestas-a-la-vez" class="slide level2">
+<h2>Varias respuestas a la vez</h2>
+<p><span class="eyebrow">MANOVA · Definición</span></p>
+<p>A veces se miden <span class="ojo"><strong>dos o más variables de respuesta</strong></span> en el mismo experimento. Se puede analizar cada una por separado, y es lo típico.</p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Una respuesta multivariante</span> Pero a veces conviene tratar el grupo de respuestas como <span class="concepto"><strong>una sola respuesta multivariante</strong></span>: la función es <code>manova()</code>, el <span class="test"><strong>análisis multivariante de la varianza</strong></span>.</p>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Sin término de Error</span> <code>manova()</code> no admite ANOVA multiestrato: la fórmula <span class="ojo"><strong>no puede incluir un término <code>Error()</code></strong></span> (medidas repetidas, parcelas divididas).</p>
+</div>
+</div></div>
+<aside class="notes">
+<p>El «término de Error» se refiere a fórmulas como y ~ trat + Error(bloque) de aov(), usadas en diseños con varios estratos. Ventaja de MANOVA sobre varios ANOVA: considera la correlación entre las respuestas y hace una sola prueba (controla el error tipo I global).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="los-datos-film-plástico" class="slide level2">
+<h2>Los datos: film plástico</h2>
+<p><span class="eyebrow">Práctico 14 · MANOVA</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBFeHBlcmltZW50byBkZSBwcm9kdWNjaW9uIGRlIGZpbG0gcGxhc3RpY28gKENyYXdsZXkpOlxuIyB0cmVzIHJlc3B1ZXN0YXMgeSBkb3MgZmFjdG9yZXMgZGUgZG9zIG5pdmVsZXNcbmZpbG0gPC0gcmVhZC50YWJsZShcIm1hbm92YV9maWxtX3BsYXN0aWNvLnR4dFwiLFxuICAgICAgICAgICAgICAgICAgIGhlYWRlciA9IFRSVUUsIHN0cmluZ3NBc0ZhY3RvcnMgPSBUUlVFKVxubmFtZXMoZmlsbSlcbnN0cihmaWxtKSJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Respuestas (<em>Y</em>)</span> <strong>tear</strong> (resistencia al rasgado), <strong>gloss</strong> (brillo) y <strong>opacity</strong> (opacidad).</p>
+</div>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Factores</span> <strong>rate</strong> (tasa de extrusión) y <strong>additive</strong> (cantidad de aditivo): <em>Low</em> / <em>High</em>.</p>
+</div>
+</div></div>
+</section>
+<section id="ajuste-del-modelo" class="slide level2">
+<h2>Ajuste del modelo</h2>
+<p><span class="eyebrow">Práctico 14 · MANOVA</span></p>
+<div class="columns">
+<div class="column" style="width:58%;">
+<div class="cell">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBsYSByZXNwdWVzdGEgbXVsdGl2YXJpYW50ZSBzZSBhcm1hIGNvbiBjYmluZCgpXG5tb2RlbCA8LSBtYW5vdmEoY2JpbmQodGVhciwgZ2xvc3MsIG9wYWNpdHkpIH4gcmF0ZSAqIGFkZGl0aXZlLFxuICAgICAgICAgICAgICAgIGRhdGEgPSBmaWxtKVxuc3VtbWFyeShtb2RlbCkgICAgICAgICAgICAgICAgICAgIyBQaWxsYWkgKHBvciBkZWZlY3RvKVxuc3VtbWFyeShtb2RlbCwgdGVzdCA9IFwiV2lsa3NcIikifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:42%;">
+<p>Efectos multivariantes significativos de <span class="ojo"><strong>rate</strong></span> y <span class="ojo"><strong>additive</strong></span>; la interacción no.</p>
+<p>Las pruebas <em>F</em> usan <span class="ojo"><strong>3 y 14 gl</strong></span> (no 1 y 16).</p>
+<div class="tarjeta">
+<p><span class="test"><strong>Pillai</strong></span> es el más robusto; <span class="test"><strong>Wilks</strong></span>, el más citado. Con factores de 2 niveles los cuatro estadísticos dan el mismo <em>F</em>.</p>
+</div>
+</div></div>
+<aside class="notes">
+<p>Se usa data = film en vez de attach(): así R sabe de dónde vienen las variables. Otras opciones de test: “Hotelling-Lawley” y “Roy”.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="qué-son-pillai-y-wilks" class="slide level2">
+<h2>¿Qué son Pillai y Wilks?</h2>
+<p><span class="eyebrow">MANOVA · Estadísticos</span></p>
+<p>MANOVA compara la variación <span class="concepto"><strong>entre grupos</strong></span> (la del efecto, <em>H</em>) con la variación <span class="concepto"><strong>dentro de los grupos</strong></span> (residual, <em>E</em>). Con varias respuestas no hay un solo cociente <em>F</em>: hay varias formas de resumir <em>H</em> frente a <em>E</em>.</p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Pillai (traza de Pillai-Bartlett)</span> Proporción de la variación multivariante que <span class="clave"><strong>explica el efecto</strong></span>. Va de 0 a 1: <span class="clave"><strong>mayor = efecto más fuerte</strong></span> (como un <em>R</em>²). El más robusto si no se cumplen los supuestos; el que R usa por defecto.</p>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Wilks (lambda de Wilks)</span> Proporción de la variación que el efecto <span class="ojo"><strong>no explica</strong></span>: |<em>E</em>| / |<em>H</em> + <em>E</em>|. Va de 0 a 1: <span class="ojo"><strong>menor = efecto más fuerte</strong></span> (como 1 − <em>R</em>²). El más usado en publicaciones.</p>
+</div>
+</div></div>
+<p>En el ejemplo, <em>rate</em>: Pillai = 0,618 y Wilks = 0,382; suman 1 porque <em>rate</em> tiene 1 gl. Cada estadístico se transforma en un <span class="test"><strong><em>F</em> aproximado</strong></span> (<em>approx F</em>) y de ahí sale el p: por eso aquí ambos dan el mismo p.</p>
+<aside class="notes">
+<p>H es la matriz de sumas de cuadrados y productos cruzados del efecto (entre grupos) y E la de los residuos; son la versión multivariante de SC entre y SC dentro del ANOVA. Los cuatro estadísticos de summary.manova resumen los valores propios (lambda) de E⁻¹H: Pillai = Σ λ/(1+λ); Wilks = Π 1/(1+λ); Hotelling-Lawley = Σ λ; Roy = el mayor λ. Con 1 gl hay un solo valor propio: Pillai = λ/(1+λ) y Wilks = 1/(1+λ) suman 1 y los cuatro dan el mismo F. Con factores de 3 o más niveles pueden diferir; Pillai es el recomendado con grupos de tamaños distintos o supuestos dudosos.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="efectos-en-cada-respuesta" class="slide level2">
+<h2>Efectos en cada respuesta</h2>
+<p><span class="eyebrow">Práctico 14 · MANOVA</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBjYWRhIHZhcmlhYmxlIGRlIHJlc3B1ZXN0YSBwb3Igc2VwYXJhZG9cbnN1bW1hcnkuYW92KG1vZGVsKSJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<ul>
+<li><span class="ojo"><strong>tear</strong></span>: responde a rate y a additive.</li>
+<li><span class="ojo"><strong>gloss</strong></span>: solo a rate (additive e interacción marginales, p &lt; 0,1).</li>
+<li><span class="ojo"><strong>opacity</strong></span>: no responde a nada.</li>
+</ul>
+<p><span class="concepto">El MANOVA dice <em>si</em> hay efecto; <code>summary.aov()</code> dice <span class="clave"><strong>en qué respuesta</strong></span>.</span></p>
+</div></div>
+</section>
+<section id="se-cumplen-los-supuestos" class="slide level2">
+<h2>¿Se cumplen los supuestos?</h2>
+<p><span class="eyebrow">Práctico 14 · MANOVA</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBub3JtYWxpZGFkIGRlIGxvcyByZXNpZHVvcywgdW5hIHJlc3B1ZXN0YSBhIGxhIHZlelxuYXBwbHkocmVzaWR1YWxzKG1vZGVsKSwgMixcbiAgICAgIGZ1bmN0aW9uKHgpIHNoYXBpcm8udGVzdCh4KSRwLnZhbHVlKSJ9
+</script>
+</div>
+</div>
+<p>Los tres p &gt; 0,05: <span class="clave"><strong>no hay evidencia contra la normalidad</strong></span>.</p>
+</div><div class="column" style="width:50%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">MANOVA supone</span> <strong>1.</strong> Observaciones independientes. <strong>2.</strong> Normalidad multivariante de los residuos. <strong>3.</strong> Igual matriz de covarianzas en todos los grupos. <strong>4.</strong> Más observaciones por grupo que respuestas (aquí 5 &gt; 3).</p>
+</div>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">¿Y si no se cumplen?</span> Datos de especies, muchos ceros, distancias no euclidianas: <span class="test"><strong>PERMANOVA</strong></span>.</p>
+</div>
+</div></div>
+<aside class="notes">
+<p>Revisar cada respuesta con shapiro.test es una aproximación: la normalidad de cada variable no garantiza la normalidad multivariante, pero si alguna falla, la multivariante tampoco se cumple. La homogeneidad de matrices de covarianza se suele probar con la M de Box (heplots::boxM), muy sensible a la no normalidad; con diseños balanceados Pillai es robusto.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="por-qué-no-tres-anova" class="slide level2 tu-turno">
+<h2>¿Por qué no tres ANOVA?</h2>
+<p><span class="eyebrow">Tu turno · Discusión</span></p>
+<p><span class="tiempo">⏱ 3 min · en parejas</span></p>
+<p><span class="pregunta"><strong>Si <code>summary.aov()</code> ya da un ANOVA por respuesta, ¿qué gana el MANOVA? Piensen en dos razones.</strong></span></p>
+<div class="fragment tarjeta">
+<p><strong>1. Error tipo I:</strong> con tres ANOVA a α = 0,05 la probabilidad de al menos un falso positivo sube a ~14 %; el MANOVA hace <span class="clave"><strong>una sola prueba global</strong></span>. <strong>2. Correlación entre respuestas:</strong> un tratamiento puede mover <em>tear</em> y <em>gloss</em> juntas aunque cada efecto por separado sea débil; el MANOVA <span class="clave"><strong>usa esa covarianza</strong></span>. Lo habitual: MANOVA primero y, si es significativo, ANOVA por respuesta para ver dónde está el efecto.</p>
+</div>
+</section>
+<section id="manova-vs.-permanova" class="slide level2">
+<h2>MANOVA vs.&nbsp;PERMANOVA</h2>
+<p><span class="eyebrow">PERMANOVA · ¿Qué cambia?</span></p>
+<p>La <span class="clave"><strong>misma pregunta</strong></span>: ¿difieren los grupos en todas las respuestas a la vez? Cambia <span class="concepto"><strong>cómo se mide</strong></span> la diferencia y <span class="concepto"><strong>cómo se obtiene el p</strong></span>.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 39%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>MANOVA · paramétrico</th>
+<th>PERMANOVA · no paramétrico</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Trabaja sobre</strong></td>
+<td>las respuestas: <code>cbind(y1, y2, …)</code></td>
+<td>una <span class="concepto"><strong>matriz de distancias</strong></span> entre muestras</td>
+</tr>
+<tr class="even">
+<td><strong>Distancia</strong></td>
+<td>euclidiana (implícita)</td>
+<td>cualquiera: euclidiana, Bray-Curtis…</td>
+</tr>
+<tr class="odd">
+<td><strong>Valor p</strong></td>
+<td>distribución <em>F</em> teórica (Pillai, Wilks)</td>
+<td><span class="concepto"><strong>permutaciones</strong></span> de las etiquetas de grupo</td>
+</tr>
+<tr class="even">
+<td><strong>Supone</strong></td>
+<td>normalidad multivariante, covarianzas iguales</td>
+<td>independencia y <span class="pregunta"><strong>dispersión similar</strong></span></td>
+</tr>
+<tr class="odd">
+<td><strong>Respuestas</strong></td>
+<td>menos que las observaciones por grupo</td>
+<td>sin límite (17 variables, 200 especies)</td>
+</tr>
+<tr class="even">
+<td><strong>Sirve para</strong></td>
+<td>pocas respuestas continuas y normales</td>
+<td>especies, conteos, muchos ceros</td>
+</tr>
+</tbody>
+</table>
+<aside class="notes">
+<p>PERMANOVA es no paramétrico: no supone ninguna distribución; el p sale de reordenar al azar las etiquetas de grupo (999 veces por defecto) y contar cuántas veces el pseudo-F permutado iguala o supera al observado. El pseudo-F se calcula como el F del ANOVA (variación entre grupos / dentro de grupos), pero desde la matriz de distancias. Es el análogo multivariante de lo que Kruskal-Wallis es para el ANOVA (clase 8), aunque trabaja con distancias y no con rangos. No es libre de supuestos: observaciones intercambiables (independientes) y dispersión parecida entre grupos, que se revisa con betadisper.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="permanova-con-adonis2" class="slide level2">
+<h2>PERMANOVA con <em>adonis2</em></h2>
+<p><span class="eyebrow">Práctico 14 · PERMANOVA</span></p>
+<p><span class="concepto"><strong>MANOVA basado en distancias</strong></span>: acepta cualquier distancia (euclidiana, Bray-Curtis…) y calcula el p por <span class="concepto"><strong>permutaciones</strong></span>, sin suponer normalidad.</p>
+<div class="cell">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyAzNiBwYXJjZWxhcyBlbiA0IHBpc29zIGRlIHZlZ2V0YWNpb24sIDE3IHZhcmlhYmxlcyAoY29sdW1uYXMgNCBhIDIwKVxuZGF0YSA8LSByZWFkLmNzdignZGF0YS5jc3YnLCBzZXAgPSAnLCcsIGRlYyA9ICcsJywgc3RyaW5nc0FzRmFjdG9ycyA9IFRSVUUpXG52YXIgPC0gc2NhbGUoZGF0YVssIDQ6MjBdKSAgICAgICAgIyBlc2NhbGFkYXM6IHVuaWRhZGVzIGRpc3RpbnRhc1xuZGlzX3ZlZyA8LSBkaXN0KHZhcikgICAgICAgICAgICAgICMgZGlzdGFuY2lhIGV1Y2xpZGlhbmFcbnNldC5zZWVkKDEyMylcbmFkb25pczIoZGlzX3ZlZyB+IHBpc28sIGRhdGEgPSBkYXRhKSJ9
+</script>
+</div>
+</div>
+<p><span class="texto-28">El piso explica el <span class="ojo"><strong>45 %</strong></span> (R2), p = 0,001. Pero también sale significativo si los grupos solo <span class="pregunta"><strong>difieren en dispersión</strong></span>.</span></p>
+<aside class="notes">
+<p>adonis2 (vegan) particiona la suma de cuadrados de las distancias entre y dentro de grupos, como un ANOVA, y obtiene el p comparando el F observado con 999 permutaciones de las etiquetas. set.seed fija las permutaciones para que el p sea reproducible.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="betadisper-misma-dispersión" class="slide level2">
+<h2><em>betadisper</em>: ¿misma dispersión?</h2>
+<p><span class="eyebrow">PERMANOVA · Supuesto</span></p>
+<div class="columns">
+<div class="column" style="width:45%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">¿Qué compara?</span> Con un <span class="ojo"><strong>PCoA</strong></span> (cualquier distancia) calcula la <span class="ojo"><strong>distancia de cada muestra al centro de su grupo</strong></span> y compara esas distancias: es la <span class="test"><strong>prueba de Levene</strong></span>, pero multivariante.</p>
+</div>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">¿Para qué?</span> PERMANOVA <span class="test"><strong>supone dispersiones similares</strong></span>. Si un grupo está más disperso, un p significativo puede deberse a la dispersión y no a la posición de los centros.</p>
+</div>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="clase12_files/figure-revealjs/unnamed-chunk-9-1.png" alt="Arriba, dos grupos con la misma dispersión y centros distintos; abajo, dos grupos con el mismo centro y dispersión distinta. En ambos casos PERMANOVA puede dar significativo; betadisper solo en el de abajo" width="880"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="texto-28"><span class="test"><strong>Prueba de Levene</strong></span>: evalúa si los grupos tienen la <span class="clave"><strong>misma varianza</strong></span> con un ANOVA sobre la distancia de cada dato al centro de su grupo.</span></p>
+</div></div>
+<aside class="notes">
+<p>El centro de cada grupo es por defecto la mediana espacial (type = “median”), por eso R imprime «Average distance to median». Con diseños balanceados PERMANOVA es bastante robusto a dispersiones distintas, pero con grupos de tamaños distintos puede equivocarse mucho.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="las-dispersiones-difieren" class="slide level2">
+<h2>Las dispersiones difieren</h2>
+<p><span class="eyebrow">Práctico 14 · betadisper</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiZ3JvdXBzIDwtIGRhdGEkcGlzb1xuYmRpc3BfdmVnIDwtIGJldGFkaXNwZXIoZGlzX3ZlZywgZ3JvdXBzKVxuYmRpc3BfdmVnXG5hbm92YShiZGlzcF92ZWcpXG5zZXQuc2VlZCgxMjMpXG5wZXJtdXRlc3QoYmRpc3BfdmVnKSAgICMgbGEgbWlzbWEgcHJ1ZWJhLCBjb24gcGVybXV0YWNpb25lcyJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="cell">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjYsImZpZy13aWR0aCI6N30sImNvZGUiOiJib3hwbG90KGJkaXNwX3ZlZywgeWxhYiA9IFwiRGlzdGFuY2lhIGFsIGNlbnRyb2lkZVwiKSJ9
+</script>
+</div>
+</div>
+<p><span class="ojo"><strong>EscAnd</strong></span> es el piso más disperso y <span class="ojo"><strong>AndSup</strong></span> el menos: <span class="clave">parte del resultado de PERMANOVA puede ser dispersión</span>.</p>
+</div></div>
+</section>
+<section id="dispersión-por-piso" class="slide level2">
+<h2>Dispersión por piso</h2>
+<p><span class="eyebrow">Práctico 14 · betadisper</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-9" class="exercise-cell">
+
+</div>
+<script type="webr-9-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo0LjgsImZpZy13aWR0aCI6N30sImNvZGUiOiIjIGNvbiBheGVzIGFjY2VkZW1vcyBhIGxvcyBkaXN0aW50b3MgZWplcyBkZWwgUENvQVxucGxvdChiZGlzcF92ZWcsIGF4ZXMgPSBjKDEsIDIpKSJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-10" class="exercise-cell">
+
+</div>
+<script type="webr-10-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo0LjQsImZpZy13aWR0aCI6N30sImNvZGUiOiJIU0RfdmVnIDwtIFR1a2V5SFNEKGJkaXNwX3ZlZylcbkhTRF92ZWdcbnBsb3QoSFNEX3ZlZykifQ==
+</script>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>Solo EscAnd-AndSup tiene p ajustado &lt; 0,05 (p = 0,006). Conclusión para la parte 1: los pisos difieren en su vegetación (PERMANOVA), pero también en su variabilidad; hay que reportar ambas cosas y mirar la ordenación.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="permanova-con-pingüinos" class="slide level2 tu-turno">
+<h2>PERMANOVA con pingüinos</h2>
+<p><span class="eyebrow">Tu turno · Completar el código</span></p>
+<p><span class="tiempo">⏱ 5 min · en parejas</span></p>
+<p>¿Difieren las 3 especies de pingüinos en su morfología (4 medidas)? ¿Y en su dispersión?</p>
+<div class="opciones">
+<p><strong>Fórmula de <code>adonis2</code>:</strong> <code>distancia ~ factor</code>, aquí <code>d ~ species</code> (con <code>data = p</code>). <strong><code>betadisper(d, grupos)</code>:</strong> <code>grupos</code> es un vector, aquí <code>p$species</code>. <strong>Prueba:</strong> <code>permutest(b)</code> o <code>anova(b)</code>.</p>
+</div>
+<div class="cell" data-exercise="ej_permanova">
+<div>
+<div id="webr-11" class="exercise-cell">
+
+</div>
+<script type="webr-11-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImVqX3Blcm1hbm92YSIsImZpZy1oZWlnaHQiOiI1LjYiLCJmaWctd2lkdGgiOiI3In0sImNvZGUiOiJwIDwtIG5hLm9taXQocGVuZ3VpbnNbLCBjKFwic3BlY2llc1wiLCBcImJpbGxfbGVuXCIsIFwiYmlsbF9kZXBcIiwgXCJmbGlwcGVyX2xlblwiLCBcImJvZHlfbWFzc1wiKV0pXG5kIDwtIGRpc3Qoc2NhbGUocFssIC0xXSkpXG5zZXQuc2VlZCgxMjMpXG5hZG9uaXMyKF9fX19fXywgZGF0YSA9IHApXG5iIDwtIGJldGFkaXNwZXIoZCwgX19fX19fKVxuc2V0LnNlZWQoMTIzKVxucGVybXV0ZXN0KGIpIn0=
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ej_permanova">
+<p>A la izquierda de <code>~</code> va la matriz de distancias <code>d</code>; a la derecha, la columna de especie. En <code>betadisper</code> el segundo argumento es el vector <code>p$species</code>.</p>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ej_permanova">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(penguins[, <span class="fu">c</span>(<span class="st">"species"</span>, <span class="st">"bill_len"</span>, <span class="st">"bill_dep"</span>, <span class="st">"flipper_len"</span>, <span class="st">"body_mass"</span>)])</span>
+<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">scale</span>(p[, <span class="sc">-</span><span class="dv">1</span>]))</span>
+<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">adonis2</span>(d <span class="sc">~</span> species, <span class="at">data =</span> p)   <span class="co"># R2 = 0.71, p = 0.001</span></span>
+<span id="cb1-5"><a href="" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(d, p<span class="sc">$</span>species)</span>
+<span id="cb1-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">permutest</span>(b)                     <span class="co"># p = 0.92: misma dispersion</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="pregunta"><strong>¿Qué conclusión es más segura, la de los pingüinos o la de los pisos de vegetación? ¿Por qué?</strong></span></p>
+<aside class="notes">
+<p>Respuesta: adonis2 R2 = 0,709, F = 412,7, p = 0,001; betadisper: distancias medias 1,00 / 0,99 / 0,98, permutest p = 0,92. Las especies difieren en la posición de sus centros y no en dispersión: la conclusión de PERMANOVA es limpia. En los pisos de vegetación la dispersión también difería (p = 0,009), así que el resultado mezcla ambas cosas.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="series-de-tiempo" class="title-slide slide level1 center" data-background-image="img/portada.jpg" data-background-opacity="0.5" data-background-color="#0F1B2A">
+<h1>Series de tiempo</h1>
+<p><span class="eyebrow">Parte 2</span></p>
+</section>
+<section id="qué-es-una-serie-de-tiempo" class="slide level2">
+<h2>¿Qué es una serie de tiempo?</h2>
+<p><span class="eyebrow">Series de tiempo · Definición</span></p>
+<p>Vectores de números <span class="concepto"><strong>normalmente espaciados regularmente en el tiempo</strong></span>: recuentos anuales de animales, medias mensuales de temperatura, presión sanguínea minuto a minuto.</p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">La serie en sí misma</span> ¿Es cíclica? ¿Tiene tendencia? ¿Se ajusta a un modelo teórico? ¿Podemos pronosticarla?</p>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Parte de un experimento</span> A veces la serie es <span class="ojo"><strong>incidental</strong></span> a un experimento diseñado (por ejemplo, medidas repetidas).</p>
+</div>
+</div></div>
+<p>Tres conceptos clave: <span class="concepto"><strong>1 · Tendencia</strong></span> <span class="concepto"><strong>2 · Dependencia serial</strong></span> <span class="concepto"><strong>3 · Estacionalidad</strong></span></p>
+</section>
+<section id="las-moscas-de-nicholson" class="slide level2">
+<h2>Las moscas de Nicholson</h2>
+<p><span class="eyebrow">Práctico 14 · Series de tiempo</span></p>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p>A.J. Nicholson crió moscas (<em>Lucilia cuprina</em>) en cultivo continuo durante <span class="ojo"><strong>casi 7 años (360 semanas)</strong></span>.</p>
+<p>Durante las primeras 200 semanas la población tiene <span class="ojo"><strong>ciclos muy regulares</strong></span>; después los ciclos se vuelven menos claros y la población sube.</p>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<div>
+<div id="webr-12" class="exercise-cell">
+
+</div>
+<script type="webr-12-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LCJmaWctd2lkdGgiOjh9LCJjb2RlIjoiYmxvd2ZseSA8LSByZWFkLnRhYmxlKFwiYmxvd2ZseS50eHRcIiwgaGVhZGVyID0gVFJVRSwgbnJvd3MgPSAzNjApXG4jIGNyZWFyIG9iamV0byBkZSBzZXJpZSBkZSB0aWVtcG8gY29uIHRzKClcbmZsaWVzIDwtIHRzKGJsb3dmbHkkZmxpZXMpXG5sZW5ndGgoZmxpZXMpXG5wbG90KGZsaWVzLCB5bGFiID0gXCJNb3NjYXMgYWR1bHRhc1wiLCB4bGFiID0gXCJTZW1hbmFcIikifQ==
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="dependencia-serial" class="slide level2">
+<h2>Dependencia serial</h2>
+<p><span class="eyebrow">Series de tiempo · Autocorrelación</span></p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Autocorrelación</span> Cómo se relaciona la población de <span class="ojo"><strong>esta semana</strong></span> con la de la <span class="ojo"><strong>semana pasada</strong></span> (lag 1), la de hace dos (lag 2)…</p>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:48%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Autocorrelación parcial</span> La relación con el lag <em>t</em> <span class="ojo"><strong>una vez controladas</strong></span> las semanas intermedias: la influencia única de ese lag.</p>
+</div>
+</div></div>
+<p>Ejemplo: la autocorrelación parcial con lag 2 es solo la que el lag 1 no explica (clave en modelos predictivos como <span class="test"><strong>ARIMA</strong></span>).</p>
+<p><span class="pregunta"><strong>OJO:</strong></span> los lags no tienen por qué ser semanales; dependen de la unidad de tiempo.</p>
+</section>
+<section id="la-serie-contra-sí-misma" class="slide level2">
+<h2>La serie contra sí misma</h2>
+<p><span class="eyebrow">Práctico 14 · Lags</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-13" class="exercise-cell">
+
+</div>
+<script type="webr-13-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjIsImZpZy13aWR0aCI6N30sImNvZGUiOiJsYWcucGxvdChmbGllcywgc2V0LmxhZ3MgPSAxOjQsXG4gICAgICAgICBsYXlvdXQgPSBjKDIsIDIpLCBkby5saW5lcyA9IEZBTFNFKSJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-14" class="exercise-cell">
+
+</div>
+<script type="webr-14-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjIsImZpZy13aWR0aCI6N30sImNvZGUiOiIjIGVuIHNlcmllcyBjaWNsaWNhcywgbGFzIHJlbGFjaW9uZXMgY29uIGxhZ3NcbiMgZ3JhbmRlcyBwdWVkZW4gc2VyIG5lZ2F0aXZhc1xubGFnLnBsb3QoZmxpZXMsIHNldC5sYWdzID0gNzoxMCxcbiAgICAgICAgIGxheW91dCA9IGMoMiwgMiksIGRvLmxpbmVzID0gRkFMU0UpIn0=
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="dónde-será-negativa" class="slide level2 tu-turno">
+<h2>¿Dónde será negativa?</h2>
+<p><span class="eyebrow">Tu turno · Predecir y verificar</span></p>
+<p><span class="tiempo">⏱ 3 min · en parejas</span></p>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p>Las moscas tienen un <span class="ojo"><strong>ciclo de unas 19 semanas</strong></span>.</p>
+<p><span class="pregunta"><strong>Antes de ejecutar: ¿en qué lag esperan la autocorrelación más negativa? ¿Y en qué lag vuelve a ser alta?</strong></span></p>
+<div class="fragment tarjeta">
+<p>Cerca de <span class="clave"><strong>medio ciclo (≈ 9-10 semanas)</strong></span>: la población está en la fase opuesta (−0,24 en lag 10). Vuelve a ser alta <span class="clave"><strong>cerca del lag 19</strong></span>, un ciclo completo.</p>
+</div>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-15" class="exercise-cell">
+
+</div>
+<script type="webr-15-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjQsImZpZy13aWR0aCI6Ny41fSwiY29kZSI6ImFjZihmbGllcywgbWFpbiA9IFwiQXV0b2NvcnJlbGFjaW9uZXNcIiwgY29sID0gXCJyZWRcIikifQ==
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="autocorrelación-parcial" class="slide level2">
+<h2>Autocorrelación parcial</h2>
+<p><span class="eyebrow">Práctico 14 · acf</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-16" class="exercise-cell">
+
+</div>
+<script type="webr-16-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjYsImZpZy13aWR0aCI6Ny41fSwiY29kZSI6IiMgwr9xdWUgcmV0cmFzb3MgZ2VuZXJhbiBsb3MgY2ljbG9zP1xuYWNmKGZsaWVzLCBtYWluID0gXCJBdXRvY29ycmVsYWNpb25lcyBwYXJjaWFsZXNcIixcbiAgICB0eXBlID0gXCJwXCIsIGNvbCA9IFwicmVkXCIpIn0=
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<p><span class="concepto"><strong>Parcial negativa</strong></span> en el lag <em>k</em>: descontados los lags intermedios, muchas moscas hace <em>k</em> semanas → <span class="concepto"><strong>menos moscas hoy</strong></span>.</p>
+<p>Aquí es negativa en los lags <span class="ojo"><strong>2 y 3</strong></span>: dependencia de la densidad con ese retraso, la duración de la larva y la pupa.</p>
+<p>Los ciclos se deben a la <span class="clave"><strong>sobrecompensación</strong></span> por competencia entre larvas por el alimento (<em>scramble</em>).</p>
+<p><span class="pregunta"><strong>Hay una retroalimentación positiva con ~12 semanas de retraso. ¿Una causa posible?</strong></span></p>
+</div></div>
+<aside class="notes">
+<p>Las líneas discontinuas azules marcan el umbral de correlación significativa (±1,96/√n). La autocorrelación parcial en el lag k equivale al coeficiente de y(t−k) en una regresión de y(t) sobre y(t−1), …, y(t−k): el efecto propio de ese lag. Lag 1 positivo (0,88) = inercia: muchas moscas esta semana, muchas la próxima. Lags 2 y 3 negativos = retroalimentación negativa retardada: muchas adultas hace 2-3 semanas pusieron muchos huevos, las larvas compitieron por el alimento, sobrevivieron pocas y hoy emergen menos adultas. Esa retroalimentación negativa con retardo es la que genera los ciclos. Solo se interpretan las barras que salen de las bandas azules.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="por-qué-negativa-desde-el-lag-2" class="slide level2">
+<h2>¿Por qué negativa desde el lag 2?</h2>
+<p><span class="eyebrow">Dependencia serial · acf parcial</span></p>
+<p>La autocorrelación <span class="concepto"><strong>total</strong></span> en el lag 2 es positiva. La <span class="concepto"><strong>parcial</strong></span> responde otra pregunta: ¿qué aporta el lag 2 <span class="clave"><strong>por su cuenta</strong></span>, una vez descontado el lag 1?</p>
+<div class="columns">
+<div class="column" style="width:33%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">1 · Lo observado</span> La correlación total entre esta semana y la de hace dos es <span class="ojo"><strong>+0,74</strong></span>.</p>
+</div>
+</div><div class="column" style="width:33%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">2 · Solo la inercia</span> Si solo actuara el lag 1 (0,88), dos pasos darían 0,88 × 0,88 = <span class="ojo"><strong>0,77</strong></span>.</p>
+</div>
+</div><div class="column" style="width:33%;">
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">3 · La diferencia</span> 0,74 &lt; 0,77: el lag 2 <span class="pregunta"><strong>resta</strong></span>. Su aporte propio es negativo: parcial = <span class="ojo"><strong>−0,15</strong></span>.</p>
+</div>
+</div></div>
+<p>A igual número de moscas la semana pasada, <span class="clave"><strong>más moscas hace 2–3 semanas → menos moscas hoy</strong></span> (más larvas compitiendo). En el lag 3 el efecto es mayor: −0,23.</p>
+<aside class="notes">
+<p>acf(flies): lags 1 a 3 = 0,88; 0,74; 0,57. Parcial = 0,88; −0,15; −0,23 (bandas ±0,10). Parcial negativa no significa correlación total negativa (es +0,74): significa que es menor que la que produciría la pura inercia semana a semana. Lag 2: parcial = (r2 − r1²) / (1 − r1²) = (0,741 − 0,774) / (1 − 0,774) = −0,15. Equivale al coeficiente de y(t−2) en una regresión de y(t) sobre y(t−1) e y(t−2). Biología: a igual número de adultas la semana anterior, más adultas 2-3 semanas antes = más huevos y más larvas compitiendo = menos adultas hoy. Esa retroalimentación negativa retardada genera los ciclos.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="tendencia-de-la-serie" class="slide level2">
+<h2>Tendencia de la serie</h2>
+<p><span class="eyebrow">Práctico 14 · Tendencia</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-17" class="exercise-cell">
+
+</div>
+<script type="webr-17-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyByZWdyZXNpb24gZGUgbGEgc2VyaWUgY29udHJhIGVsIHRpZW1wb1xuc2VtYW5hIDwtIHNlcV9hbG9uZyhmbGllcylcbmZpdCA8LSBsbShmbGllcyB+IHNlbWFuYSlcbnN1bW1hcnkoZml0KSJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="cell">
+<div>
+<div id="webr-18" class="exercise-cell">
+
+</div>
+<script type="webr-18-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoicGxvdChmbGllcywgeWxhYiA9IFwiTW9zY2FzIGFkdWx0YXNcIiwgeGxhYiA9IFwiU2VtYW5hXCIpXG5saW5lcyhzZW1hbmEsIHByZWRpY3QoZml0KSwgY29sID0gXCJyZWRcIiwgbHR5ID0gMiwgbHdkID0gMS41KSJ9
+</script>
+</div>
+</div>
+<p><span class="texto-28">Aumentan en promedio <span class="ojo"><strong>11 moscas por semana</strong></span>. Pero <span class="pregunta"><strong>¿podemos creer en ese p?</strong></span></span></p>
+</div></div>
+</section>
+<section id="residuos-independientes" class="slide level2">
+<h2>¿Residuos independientes?</h2>
+<p><span class="eyebrow">Tendencia · Supuestos</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="clase12_files/figure-revealjs/unnamed-chunk-22-1.png" alt="Dos series de residuos simuladas: arriba independientes, que saltan al azar alrededor de cero; abajo autocorrelacionados (phi = 0,85), con ondas largas por encima y por debajo de cero" width="880"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><code>lm()</code> supone <span class="test"><strong>residuos independientes</strong></span>. En una serie casi nunca lo son.</p>
+<div class="cell">
+<div>
+<div id="webr-19" class="exercise-cell">
+
+</div>
+<script type="webr-19-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjozLjIsImZpZy13aWR0aCI6N30sImNvZGUiOiJhY2YocmVzaWQoZml0KSwgbWFpbiA9IFwiUmVzaWR1b3MgZGUgbG1cIilcbiMgRHVyYmluLVdhdHNvbjogSDAgPSBzaW4gYXV0b2NvcnJlbGFjaW9uIChEVyB+IDIpXG5kd3Rlc3QoZml0KSJ9
+</script>
+</div>
+</div>
+<p>DW = 0,29: <span class="pregunta"><strong>autocorrelación positiva fuerte</strong></span> → errores estándar demasiado pequeños.</p>
+</div></div>
+<aside class="notes">
+<p>Si los residuos de semanas vecinas se parecen, el modelo cree tener 360 datos independientes y tiene muchos menos. La estimación de la pendiente sigue siendo razonable, pero su error estándar y su p son demasiado optimistas. DW va de 0 a 4: 2 = sin autocorrelación, &lt; 2 positiva, &gt; 2 negativa.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="regresión-con-errores-ar1" class="slide level2">
+<h2>Regresión con errores AR(1)</h2>
+<p><span class="eyebrow">Práctico 14 · gls</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-20" class="exercise-cell">
+
+</div>
+<script type="webr-20-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBtaW5pbW9zIGN1YWRyYWRvcyBnZW5lcmFsaXphZG9zIGNvbiBlcnJvcmVzXG4jIGF1dG9ycmVncmVzaXZvcyBkZSBvcmRlbiAxXG5maXRfZ2xzIDwtIGdscyhmbGllcyB+IHNlbWFuYSwgY29ycmVsYXRpb24gPSBjb3JBUjEoKSlcbnN1bW1hcnkoZml0X2dscylcbiMgY29tcGFyYXIgbGEgcGVuZGllbnRlIGNvbiBhbWJvcyBtb2RlbG9zXG5yYmluZChsbSAgPSBzdW1tYXJ5KGZpdCkkY29lZmZpY2llbnRzW1wic2VtYW5hXCIsIF0sXG4gICAgICBnbHMgPSBzdW1tYXJ5KGZpdF9nbHMpJHRUYWJsZVtcInNlbWFuYVwiLCBdKSJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Pendiente</th>
+<th><em>lm</em></th>
+<th><em>gls</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Estimación</td>
+<td>10,9</td>
+<td>11,8</td>
+</tr>
+<tr class="even">
+<td>Error estándar</td>
+<td>1,1</td>
+<td><span class="pregunta"><strong>4,0</strong></span></td>
+</tr>
+<tr class="odd">
+<td>t = est. / EE</td>
+<td>10,0</td>
+<td><span class="pregunta"><strong>3,0</strong></span></td>
+</tr>
+<tr class="even">
+<td>p</td>
+<td>5·10⁻²¹</td>
+<td>0,003</td>
+</tr>
+</tbody>
+</table>
+<p>Misma tendencia, <span class="pregunta"><strong>error estándar ×4</strong></span>: sigue significativa, pero el <em>t</em> queda cerca del valor crítico (≈ 2).</p>
+<p><span class="test"><strong>corAR1</strong></span>: <em>gls</em> ajusta la misma recta, pero estima cuánto se parece cada residuo al anterior (Phi = 0,86) y corrige el error estándar.</p>
+</div></div>
+<aside class="notes">
+<p>gls (paquete nlme) estima la regresión permitiendo que los residuos sigan un proceso autorregresivo de orden 1: e(t) = Phi · e(t−1) + ruido. El intercepto deja de ser significativo (p = 0,097). Regla práctica: si dwtest o el acf de los residuos muestran autocorrelación, reportar gls en vez de lm.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="lm-o-gls" class="slide level2">
+<h2>¿<em>lm</em> o <em>gls</em>?</h2>
+<p><span class="eyebrow">Tendencia · Autocorrelación</span></p>
+<p>Ajustan la <span class="clave"><strong>misma recta</strong></span>. Cambia lo que suponen de los <span class="concepto"><strong>residuos</strong></span> y, con eso, el error estándar y el p.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 35%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><em>lm</em></th>
+<th><em>gls</em> + <em>corAR1</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Residuos</strong></td>
+<td>independientes</td>
+<td>cada uno se parece al anterior (Phi)</td>
+</tr>
+<tr class="even">
+<td><strong>Cada semana aporta</strong></td>
+<td>información nueva</td>
+<td>información en parte repetida</td>
+</tr>
+<tr class="odd">
+<td><strong>Pendiente</strong></td>
+<td>10,9</td>
+<td>11,8 (casi igual)</td>
+</tr>
+<tr class="even">
+<td><strong>Error estándar y p</strong></td>
+<td><span class="pregunta"><strong>demasiado pequeños</strong></span> si hay autocorrelación</td>
+<td>corregidos (EE ×4)</td>
+</tr>
+</tbody>
+</table>
+<p><span class="test"><strong>¿Solo quiero la tendencia?</strong></span> Para describirla o dibujarla, <em>lm</em> basta. Para decir si es <span class="test"><strong>significativa</strong></span> (p, intervalo de confianza), revisar los residuos (<code>acf</code>, <code>dwtest</code>): si están autocorrelacionados, <em>gls</em>.</p>
+<aside class="notes">
+<p>gls (mínimos cuadrados generalizados) ajusta el mismo modelo lineal que lm, pero en vez de suponer residuos independientes estima además cómo se correlacionan: con corAR1, e(t) = Phi · e(t−1) + ruido. Con Phi = 0,86 las 360 semanas equivalen aproximadamente a n(1 − Phi)/(1 + Phi) ≈ 26 datos independientes; por eso el error estándar crece. La pendiente de lm sigue siendo insesgada con residuos autocorrelacionados: lo que falla es su error estándar, y con él t, p e intervalos de confianza. Para describir, graficar o quitar la tendencia, lm es suficiente; para una prueba de hipótesis hay que revisar los residuos y, si están autocorrelacionados, usar gls. Si los residuos de lm no muestran autocorrelación, lm y gls dan lo mismo.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="cambio-de-régimen" class="slide level2">
+<h2>Cambio de régimen</h2>
+<p><span class="eyebrow">Práctico 14 · Semana 200</span></p>
+<div class="columns">
+<div class="column" style="width:62%;">
+<div class="cell">
+<div>
+<div id="webr-21" class="exercise-cell">
+
+</div>
+<script type="webr-21-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjozLjgsImZpZy13aWR0aCI6MTB9LCJjb2RlIjoicGFyKG1mcm93ID0gYygxLCAyKSlcbmFjZihmbGllc1sxOjIwMF0sIGxhZy5tYXggPSAzMCwgbWFpbiA9IFwiU2VtYW5hcyAxIGEgMjAwXCIpXG5hY2YoZmxpZXNbMjAxOjM2MF0sIGxhZy5tYXggPSAzMCwgbWFpbiA9IFwiU2VtYW5hcyAyMDEgYSAzNjBcIilcbnBhcihtZnJvdyA9IGMoMSwgMSkpXG5jKGFudGVzID0gbWVhbihmbGllc1sxOjIwMF0pLCBkZXNwdWVzID0gbWVhbihmbGllc1syMDE6MzYwXSkpIn0=
+</script>
+</div>
+</div>
+</div><div class="column" style="width:38%;">
+<p><span class="concepto"><strong>Antes</strong></span>: ciclo regular de 19 semanas (r = 0,60 en lag 19).</p>
+<p><span class="concepto"><strong>Después</strong></span>: ciclo débil (r = 0,20 en lag 17) y la media casi se duplica.</p>
+<p><span class="ojo"><strong>Una serie, dos comportamientos</strong></span>: un solo modelo para toda la serie la describe mal.</p>
+</div></div>
+<aside class="notes">
+<p>Nicholson atribuyó el cambio a una posible mutación. Comparar el acf por tramos es la forma más simple de detectar un cambio de régimen; hay pruebas formales de quiebre estructural (paquete strucchange) que no se ven en el curso.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="estacionariedad" class="slide level2">
+<h2>Estacionariedad</h2>
+<p><span class="eyebrow">Series de tiempo · Supuesto</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="clase12_files/figure-revealjs/unnamed-chunk-26-1.png" alt="Tres series simuladas: estacionaria, que oscila alrededor de una media fija; con tendencia, cuya media sube; y con varianza creciente, cuyas oscilaciones se ensanchan" width="946"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<p><span class="concepto"><strong>Estacionaria</strong></span>: media y varianza <span class="ojo"><strong>constantes en el tiempo</strong></span>.</p>
+<p>Muchos modelos (AR, MA, ARMA) la suponen. La tendencia de las moscas la rompe.</p>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Solución simple: diferenciar</span> Usar el <span class="ojo"><strong>cambio</strong></span> de un paso al siguiente, <em>y</em>ₜ − <em>y</em>ₜ₋₁: <code>diff()</code>. Es la <span class="test"><strong>«I» de ARIMA</strong></span>.</p>
+</div>
+</div></div>
+</section>
+<section id="estacionariedad-en-r" class="slide level2">
+<h2>Estacionariedad en R</h2>
+<p><span class="eyebrow">Práctico 14 · Estacionariedad</span></p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="cell">
+<div>
+<div id="webr-22" class="exercise-cell">
+
+</div>
+<script type="webr-22-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBLUFNTOiBIMCA9IGxhIHNlcmllIGVzIGVzdGFjaW9uYXJpYVxua3Bzcy50ZXN0KGZsaWVzKVxuZGZsaWVzIDwtIGRpZmYoZmxpZXMpXG5rcHNzLnRlc3QoZGZsaWVzKVxuIyBjdWFudGFzIGRpZmVyZW5jaWFjaW9uZXMgc2UgbmVjZXNpdGFuXG5uZGlmZnMoZmxpZXMpIn0=
+</script>
+</div>
+</div>
+<p><code>p-value = 0.01</code> significa p ≤ 0,01 y <code>0.1</code>, p ≥ 0,1 (R avisa con un <em>warning</em>).</p>
+</div><div class="column" style="width:52%;">
+<div class="cell">
+<div>
+<div id="webr-23" class="exercise-cell">
+
+</div>
+<script type="webr-23-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjQsImZpZy13aWR0aCI6OH0sImNvZGUiOiJwYXIobWZyb3cgPSBjKDIsIDEpKVxucGxvdChkZmxpZXMsIHlsYWIgPSBcIkNhbWJpbyBzZW1hbmFsIGRlIG1vc2Nhc1wiLCB4bGFiID0gXCJTZW1hbmFcIilcbmFibGluZShoID0gMCwgbHR5ID0gMiwgY29sID0gXCJibHVlXCIpXG5hY2YoZGZsaWVzLCBtYWluID0gXCJTZXJpZSBkaWZlcmVuY2lhZGFcIilcbnBhcihtZnJvdyA9IGMoMSwgMSkpIn0=
+</script>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>La serie original no es estacionaria (p ≤ 0,01); la diferenciada sí (p ≥ 0,1). Ojo: la prueba ADF (adf.test) tiene la hipótesis al revés (H0: no estacionaria).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="y-la-temperatura-mensual" class="slide level2 tu-turno">
+<h2>¿Y la temperatura mensual?</h2>
+<p><span class="eyebrow">Tu turno · Completar el código</span></p>
+<p><span class="tiempo">⏱ 4 min</span></p>
+<p><code>temps</code>: temperatura media mensual de 13 años (<code>frequency = 12</code>). ¿Necesita diferenciarse?</p>
+<div class="opciones">
+<p><strong>Prueba:</strong> <code>kpss.test(temps)</code> (H0: estacionaria). <strong>Diferencias comunes:</strong> <code>ndiffs(temps)</code>. <strong>Diferencias estacionales</strong> (restar el mismo mes del año anterior): <code>nsdiffs(temps)</code>. Las tres reciben la serie sin comillas.</p>
+</div>
+<div class="cell" data-exercise="ej_estacionaria">
+<div>
+<div id="webr-24" class="exercise-cell">
+
+</div>
+<script type="webr-24-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImVqX2VzdGFjaW9uYXJpYSIsImZpZy1oZWlnaHQiOiI1LjYiLCJmaWctd2lkdGgiOiI3In0sImNvZGUiOiJ0ZW1wZXJhdHVyZSA8LSByZWFkLnRhYmxlKFwidGVtcC50eHRcIiwgaGVhZGVyID0gVFJVRSlcbnRlbXBzIDwtIHRzKHRlbXBlcmF0dXJlJHRlbXBzLCBmcmVxdWVuY3kgPSAxMilcbl9fX19fXyh0ZW1wcylcbm5kaWZmcyh0ZW1wcylcbl9fX19fXyh0ZW1wcykifQ==
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ej_estacionaria">
+<p>La primera línea en blanco es la prueba KPSS; la segunda cuenta las diferencias estacionales.</p>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ej_estacionaria">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a>temperature <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"temp.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a>temps <span class="ot">&lt;-</span> <span class="fu">ts</span>(temperature<span class="sc">$</span>temps, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">kpss.test</span>(temps)   <span class="co"># p &gt;= 0.1: sin tendencia</span></span>
+<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ndiffs</span>(temps)      <span class="co"># 0</span></span>
+<span id="cb2-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">nsdiffs</span>(temps)     <span class="co"># 1: hay que quitar el ciclo anual</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="pregunta"><strong>¿Por qué <code>ndiffs</code> da 0 y <code>nsdiffs</code> da 1?</strong></span></p>
+<aside class="notes">
+<p>Respuesta: la temperatura no tiene tendencia (KPSS p ≥ 0,1; ndiffs = 0), pero sí un ciclo anual fuerte, que también es no estacionariedad: la media depende del mes. Se quita con una diferencia estacional (y[t] − y[t−12]), la «D» de los ARIMA estacionales, por ejemplo el (2,1,0)[12] que veremos al final.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="medias-móviles" class="slide level2">
+<h2>Medias móviles</h2>
+<p><span class="eyebrow">Práctico 14 · Tendencia</span></p>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p>La forma más sencilla de ver patrones: la <span class="ojo"><strong>media móvil</strong></span>, por ejemplo de 3 puntos:</p>
+<p><span class="formula"><em>y′</em>ᵢ = (<em>y</em>ᵢ₋₁ + <em>y</em>ᵢ + <em>y</em>ᵢ₊₁) / 3</span></p>
+<p>Ventana impar: centrada en <em>y</em>ᵢ. Con ventana par (12 meses) se usa una media centrada «2×12»: <code>ma()</code>.</p>
+<p>Ventana de <span class="clave"><strong>12 meses</strong></span>: borra el ciclo anual y deja la tendencia.</p>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<div>
+<div id="webr-25" class="exercise-cell">
+
+</div>
+<script type="webr-25-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjQsImZpZy13aWR0aCI6OX0sImNvZGUiOiJ0ZW1wZXJhdHVyZSA8LSByZWFkLnRhYmxlKFwidGVtcC50eHRcIiwgaGVhZGVyID0gVFJVRSlcbnRlbXBzIDwtIHRzKHRlbXBlcmF0dXJlJHRlbXBzLCBmcmVxdWVuY3kgPSAxMilcbnBsb3QodGVtcHMsIHlsYWIgPSBcIlRlbXBlcmF0dXJhICjCsEMpXCIsIHhsYWIgPSBcIkHDsW9cIilcbiMgd2lkdGggPSBhbmNobyBkZSBsYSB2ZW50YW5hIChuwrAgZGUgb2JzZXJ2YWNpb25lcylcbnByb20zIDwtIHJvbGxhcHBseSh0ZW1wcywgd2lkdGggPSAzLCBtZWFuKVxubGluZXMocHJvbTMsIGNvbCA9IFwiYmx1ZVwiKVxucHJvbTcgPC0gcm9sbGFwcGx5KHRlbXBzLCB3aWR0aCA9IDcsIG1lYW4pXG5saW5lcyhwcm9tNywgY29sID0gXCJyZWRcIiwgbHdkID0gMilcbnByb20xMiA8LSBtYSh0ZW1wcywgb3JkZXIgPSAxMilcbmxpbmVzKHByb20xMiwgY29sID0gXCJkYXJrZ3JlZW5cIiwgbHdkID0gMikifQ==
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="datos-estacionales" class="slide level2">
+<h2>Datos estacionales</h2>
+<p><span class="eyebrow">Práctico 14 · Estacionalidad</span></p>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p>Muchas series tienen <span class="concepto"><strong>ciclos estacionales</strong></span>; el caso típico son los datos meteorológicos.</p>
+<p>Temperaturas máximas y mínimas y lluvia <span class="ojo"><strong>diarias</strong></span> de Silwood Park (sureste de Inglaterra), <span class="ojo"><strong>1987 a 2005</strong></span>.</p>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<div>
+<div id="webr-26" class="exercise-cell">
+
+</div>
+<script type="webr-26-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LCJmaWctd2lkdGgiOjl9LCJjb2RlIjoid2VhdGhlciA8LSByZWFkLnRhYmxlKFwiU2lsd29vZFdlYXRoZXIudHh0XCIsIGhlYWRlciA9IFRSVUUpXG5uYW1lcyh3ZWF0aGVyKVxudXBwZXIgPC0gd2VhdGhlciR1cHBlclxucGxvdCh1cHBlciwgdHlwZSA9IFwibFwiKSJ9
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="autocorrelación-estacional" class="slide level2">
+<h2>Autocorrelación estacional</h2>
+<p><span class="eyebrow">Práctico 14 · Estacionalidad</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-27" class="exercise-cell">
+
+</div>
+<script type="webr-27-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjYsImZpZy13aWR0aCI6OH0sImNvZGUiOiIjIHByb21lZGlvIGRlIGxhcyBtYXhpbWFzIHBvciBtZXMgeSBhw7FvXG50ZW1wIDwtIHRzKGFzLnZlY3Rvcih0YXBwbHkodXBwZXIsIGxpc3Qod2VhdGhlciRtb250aCwgd2VhdGhlciR5ciksIG1lYW4pKSxcbiAgICAgICAgICAgc3RhcnQgPSBjKDE5ODcsIDEpLCBmcmVxdWVuY3kgPSAxMilcbmFjZih0ZW1wLCBtYWluID0gXCJcIikgICAjIGVsIGVqZSBMYWcgZXN0YSBlbiBhw7FvcyJ9
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<p>Correlación <span class="ojo"><strong>máxima cada 12 meses</strong></span> (mismo mes del año siguiente) y <span class="ojo"><strong>mínima a los 6</strong></span> (estación opuesta).</p>
+<p>Con <code>frequency = 12</code>, R rotula el eje en años: 1 = 12 meses.</p>
+</div></div>
+</section>
+<section id="ajustar-un-ciclo-teórico" class="slide level2">
+<h2>Ajustar un ciclo teórico</h2>
+<p><span class="eyebrow">Práctico 14 · Estacionalidad</span></p>
+<div class="columns">
+<div class="column" style="width:42%;">
+<p>Fórmula de un ciclo (asume estacionalidad uniforme):</p>
+<p><span class="formula"><em>y</em> = α + β sin(2π<em>t</em>) + γ cos(2π<em>t</em>) + ε</span></p>
+<p>Antes hay que <span class="ojo"><strong>normalizar el tiempo</strong></span> para que cada ciclo (un año) valga 1 y no 365.</p>
+</div><div class="column" style="width:58%;">
+<div class="cell">
+<div>
+<div id="webr-28" class="exercise-cell">
+
+</div>
+<script type="webr-28-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo0LjYsImZpZy13aWR0aCI6OC40fSwiY29kZSI6Imxlbmd0aCh1cHBlcilcbjY5NDAgLyAxOVxudGltZSA8LSAoMTo2OTQwKSAvIDM2NS4yNjMyXG5tb2RlbCA8LSBsbSh1cHBlciB+IHNpbih0aW1lKjIqcGkpICsgY29zKHRpbWUqMipwaSkpXG5wbG90KHRpbWUsIHVwcGVyLCBwY2ggPSBcIi5cIilcbmxpbmVzKHRpbWUsIHByZWRpY3QobW9kZWwpLCBjb2wgPSBcInJlZFwiLCBsd2QgPSAxLjUpIn0=
+</script>
+</div>
+</div>
+</div></div>
+</section>
+<section id="se-ajusta-bien" class="slide level2">
+<h2>¿Se ajusta bien?</h2>
+<p><span class="eyebrow">Práctico 14 · Estacionalidad</span></p>
+<div class="columns">
+<div class="column" style="width:62%;">
+<div class="cell">
+<div>
+<div id="webr-29" class="exercise-cell">
+
+</div>
+<script type="webr-29-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoic3VtbWFyeShtb2RlbCkifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:38%;">
+<p>Los tres coeficientes son muy significativos y el ciclo anual explica <span class="ojo"><strong>~72 % de la variación diaria</strong></span> (R² = 0,717).</p>
+<p>El resto es variación de día a día… <span class="pregunta"><strong>¿independiente?</strong></span></p>
+</div></div>
+</section>
+<section id="análisis-de-los-residuos" class="slide level2">
+<h2>Análisis de los residuos</h2>
+<p><span class="eyebrow">Práctico 14 · Estacionalidad</span></p>
+<div class="cell">
+<div>
+<div id="webr-30" class="exercise-cell">
+
+</div>
+<script type="webr-30-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo0LjQsImZpZy13aWR0aCI6MTV9LCJjb2RlIjoiIyBtb2RlbDogZWwgY2ljbG8gZGUgbGEgbGFtaW5hIGFudGVyaW9yXG5tb2RlbCA8LSBsbSh1cHBlciB+IHNpbih0aW1lKjIqcGkpICsgY29zKHRpbWUqMipwaSkpXG5wYXIobWZyb3cgPSBjKDEsIDMpKVxucGxvdChtb2RlbCRyZXNpZCwgcGNoID0gXCIuXCIpXG5hYmxpbmUoaCA9IDAsIGx0eSA9IDIsIGNvbCA9IFwicHVycGxlXCIsIGx3ZCA9IDIpXG5hY2YobW9kZWwkcmVzaWQsIG1haW4gPSBcIlwiKVxuYWNmKG1vZGVsJHJlc2lkLCB0eXBlID0gXCJwXCIsIG1haW4gPSBcIlwiKVxucGFyKG1mcm93ID0gYygxLCAxKSkifQ==
+</script>
+</div>
+</div>
+<p>Días cercanos tienen errores parecidos (<span class="ojo"><strong>lag 1 ≈ 0,73</strong></span>). Es esperable en una serie, pero <span class="pregunta"><strong>viola la independencia que supone <code>lm()</code></strong></span>.</p>
+</section>
+<section id="el-mismo-ciclo-con-errores-ar1" class="slide level2">
+<h2>El mismo ciclo con errores AR(1)</h2>
+<p><span class="eyebrow">Práctico 14 · Estacionalidad</span></p>
+<div class="columns">
+<div class="column" style="width:58%;">
+<div class="cell">
+<div>
+<div id="webr-31" class="exercise-cell">
+
+</div>
+<script type="webr-31-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyByZWdyZXNpb24gY29uIGVycm9yZXMgQVIoMSksIGFqdXN0YWRhIGNvbiBhcmltYSgpXG5YIDwtIGNiaW5kKHNlbm8gPSBzaW4odGltZSoyKnBpKSwgY29zZW5vID0gY29zKHRpbWUqMipwaSkpXG5cbm1vZGVsX2FyMSA8LSBhcmltYSh1cHBlciwgb3JkZXIgPSBjKDEsIDAsIDApLCB4cmVnID0gWClcblxuIyBjb2VmaWNpZW50ZXMgeSBlcnJvcmVzIGVzdGFuZGFyIChzaW4gZWwgdGVybWlubyBhcjEpXG5jb2VmX2FyMSA8LSBtb2RlbF9hcjEkY29lZlstMV1cbmVlX2FyMSAgIDwtIHNxcnQoZGlhZyhtb2RlbF9hcjEkdmFyLmNvZWYpKVstMV1cblxuIyBlc3RhZGlzdGljbyB6IHkgc3UgdmFsb3IgcFxueiA8LSBjb2VmX2FyMSAvIGVlX2FyMVxuXG5kYXRhLmZyYW1lKGNvZWYgICA9IHJvdW5kKGNvZWZfYXIxLCAyKSxcbiAgICAgICAgICAgRUVfbG0gID0gcm91bmQoc3VtbWFyeShtb2RlbCkkY29lZmZpY2llbnRzWywgXCJTdGQuIEVycm9yXCJdLCAzKSxcbiAgICAgICAgICAgRUVfYXIxID0gcm91bmQoZWVfYXIxLCAzKSxcbiAgICAgICAgICAgeiAgICAgID0gcm91bmQoeiwgMSksXG4gICAgICAgICAgIHAgICAgICA9IGZvcm1hdC5wdmFsKDIgKiBwbm9ybSgtYWJzKHopKSkpIn0=
+</script>
+</div>
+</div>
+</div><div class="column" style="width:42%;">
+<p><span class="test"><strong>¿Por qué <code>arima</code> y no <code>gls</code>?</strong></span> Es el <span class="clave"><strong>mismo modelo</strong></span> (regresión + errores AR(1)). <code>gls</code> con 6940 datos no cabe en la memoria del navegador; en R en el computador se usa <code>gls(..., correlation = corAR1())</code>, como en el práctico.</p>
+<p>Los coeficientes casi no cambian; los <span class="pregunta"><strong>errores estándar se multiplican por 2,5</strong></span> y los p siguen siendo &lt; 2·10⁻¹⁶.</p>
+<div class="tarjeta">
+<p><span class="tarjeta-titulo">Regla</span> Si los residuos están autocorrelacionados, <span class="clave"><strong>reportar el modelo que lo considera</strong></span>.</p>
+</div>
+</div></div>
+<aside class="notes">
+<p>Salida del práctico (R en el computador, gls): lm 0,0409 / 0,0578 / 0,0578; gls 0,1037 / 0,1465 / 0,1464. arima con xreg da 0,1034 / 0,1461 / 0,1460: el mismo modelo estimado por máxima verosimilitud (gls usa REML). Con gls en el práctico: t = 144,2 / −17,3 / −49,4 y p = 0 / 7e-66 / 0 (R imprime 0 cuando p es menor que ~1e-308). arima no entrega valores p: se calculan con z = coeficiente / error estándar y la distribución normal. El ar1 estimado es 0,73, el mismo lag 1 del acf de los residuos.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="cuándo-cambia-la-conclusión" class="slide level2 tu-turno">
+<h2>¿Cuándo cambia la conclusión?</h2>
+<p><span class="eyebrow">Tu turno · Interpretar</span></p>
+<p><span class="tiempo">⏱ 3 min · en parejas</span></p>
+<p>En los dos ejemplos corregimos la autocorrelación y el error estándar creció. Recuerden: <span class="concepto"><strong>t = coeficiente / error estándar</strong></span>, y es significativo si |t| supera el valor crítico (≈ 2).</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th>t con <em>lm</em></th>
+<th>t corregido</th>
+<th>¿Significativo?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Moscas: pendiente</td>
+<td>10,0</td>
+<td>3,0</td>
+<td>sí, pero cerca del límite</td>
+</tr>
+<tr class="even">
+<td>Moscas: intercepto</td>
+<td>6,7</td>
+<td>1,7</td>
+<td><span class="pregunta"><strong>ya no</strong></span></td>
+</tr>
+<tr class="odd">
+<td>Temperatura: ciclo (coseno)</td>
+<td>−125</td>
+<td>−49</td>
+<td>sí, lejísimos</td>
+</tr>
+</tbody>
+</table>
+<p><span class="pregunta"><strong>¿Por qué la corrección cambió el resultado en las moscas y no en la temperatura?</strong></span></p>
+<div class="fragment tarjeta">
+<p>La corrección <span class="clave"><strong>siempre achica el t</strong></span> (÷3,4 en las moscas, ÷2,5 en la temperatura). La conclusión cambia solo si el t <span class="clave"><strong>cruza el valor crítico</strong></span>: con efecto pequeño o pocos datos hay poco margen (moscas); con 6940 días y un ciclo enorme, sobra (temperatura). Como no se sabe de antemano, <span class="test"><strong>se corrige siempre</strong></span>.</p>
+</div>
+<aside class="notes">
+<p>Valores: moscas, pendiente t = 10,02 (lm) y 2,98 (gls, p = 0,003); intercepto t = 6,66 (lm) y 1,66 (gls, p = 0,097). Temperatura, coseno: t = −125,2 (lm) y −49,4 (gls) o −49,6 (arima). Valor crítico de t con α = 0,05: 1,97 (358 gl) y 1,96 (6937 gl). Mensaje: corregir la autocorrelación no cambia el coeficiente, agranda su error estándar; por eso el t baja. Que la conclusión cambie depende de cuánto margen había sobre el valor crítico.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="correlación-cruzada-ccf" class="slide level2">
+<h2>Correlación cruzada: <em>ccf</em></h2>
+<p><span class="eyebrow">Práctico 14 · Dos series</span></p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div>
+<div id="webr-32" class="exercise-cell">
+
+</div>
+<script type="webr-32-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo0LjQsImZpZy13aWR0aCI6MTB9LCJjb2RlIjoibGx1dmlhIDwtIHRzKGFzLnZlY3Rvcih0YXBwbHkod2VhdGhlciRyYWluLCBsaXN0KHdlYXRoZXIkbW9udGgsIHdlYXRoZXIkeXIpLCBzdW0pKSxcbiAgICAgICAgICAgICBzdGFydCA9IGMoMTk4NywgMSksIGZyZXF1ZW5jeSA9IDEyKVxuIyBhbm9tYWxpYXMgPSB2YWxvciAtIHByb21lZGlvIGRlIGVzZSBtZXNcbmFub21hbGlhIDwtIGZ1bmN0aW9uKHgpIHggLSBhdmUoeCwgY3ljbGUoeCkpXG5wYXIobWZyb3cgPSBjKDEsIDIpKVxuY2NmKGxsdXZpYSwgdGVtcCwgbGFnLm1heCA9IDEyLCBtYWluID0gXCJTZXJpZXMgb3JpZ2luYWxlc1wiKVxuY2NmKGFub21hbGlhKGxsdXZpYSksIGFub21hbGlhKHRlbXApLCBsYWcubWF4ID0gMTIsIG1haW4gPSBcIkFub21hbMOtYXNcIilcbnBhcihtZnJvdyA9IGMoMSwgMSkpIn0=
+</script>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<p>¿Con qué <span class="concepto"><strong>desfase</strong></span> responde una serie a otra?</p>
+<p><span class="ojo"><strong>Originales</strong></span>: la onda solo refleja que ambas tienen ciclo anual.</p>
+<p><span class="clave"><strong>Anomalías</strong></span>: solo r ≈ −0,14 en lag 0: meses más cálidos de lo normal, algo más secos.</p>
+</div></div>
+<aside class="notes">
+<p>El valor de ccf(x, y) en el lag k estima la correlación entre x[t+k] e y[t]. Dos series con el mismo ciclo siempre se correlacionan aunque una no influya en la otra (correlación espuria); por eso se quitan los ciclos antes de interpretar. Las bandas azules marcan ±0,13; el −0,14 apenas las supera.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="lluvia-y-noches" class="slide level2 tu-turno">
+<h2>Lluvia y noches</h2>
+<p><span class="eyebrow">Tu turno · Aplicar</span></p>
+<p><span class="tiempo">⏱ 5 min · en parejas</span></p>
+<p>¿Los meses más lluviosos de lo normal tienen <span class="ojo"><strong>noches</strong></span> más frías o más templadas? Usen la mínima (<code>weather$lower</code>).</p>
+<div class="opciones">
+<p><strong><code>tapply(x, lista, f)</code>:</strong> <code>f</code> es <code>mean</code> para la temperatura y <code>sum</code> para la lluvia, sin comillas. <strong><code>ccf(x, y, lag.max = 12)</code>:</strong> las dos series ya convertidas a anomalías con <code>anomalia()</code>.</p>
+</div>
+<div class="cell" data-exercise="ej_ccf">
+<div>
+<div id="webr-33" class="exercise-cell">
+
+</div>
+<script type="webr-33-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImVqX2NjZiIsImZpZy1oZWlnaHQiOjQuNCwiZmlnLXdpZHRoIjo4fSwiY29kZSI6InRtaW4gPC0gdHMoYXMudmVjdG9yKHRhcHBseSh3ZWF0aGVyJGxvd2VyLCBsaXN0KHdlYXRoZXIkbW9udGgsIHdlYXRoZXIkeXIpLCBfX19fX18pKSxcbiAgICAgICAgICAgc3RhcnQgPSBjKDE5ODcsIDEpLCBmcmVxdWVuY3kgPSAxMilcbmNjZihfX19fX18sIF9fX19fXywgbGFnLm1heCA9IDEyLCBtYWluID0gXCJMbHV2aWEgdnMuIG3DrW5pbWFcIikifQ==
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ej_ccf">
+<p>La mínima mensual es el promedio (<code>mean</code>). En <code>ccf</code> van <code>anomalia(lluvia)</code> y <code>anomalia(tmin)</code>.</p>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ej_ccf">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a>tmin <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">as.vector</span>(<span class="fu">tapply</span>(weather<span class="sc">$</span>lower, <span class="fu">list</span>(weather<span class="sc">$</span>month, weather<span class="sc">$</span>yr), mean)),</span>
+<span id="cb3-2"><a href="" aria-hidden="true" tabindex="-1"></a>           <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1987</span>, <span class="dv">1</span>), <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb3-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ccf</span>(<span class="fu">anomalia</span>(lluvia), <span class="fu">anomalia</span>(tmin), <span class="at">lag.max =</span> <span class="dv">12</span>, <span class="at">main =</span> <span class="st">"Lluvia vs. mínima"</span>)</span>
+<span id="cb3-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># lag 0: r = 0.21 (positivo)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="pregunta"><strong>Comparen con la máxima (r = −0,14). ¿Qué explicación física se les ocurre?</strong></span></p>
+<aside class="notes">
+<p>Respuesta: lag 0 r = 0,21 (fuera de las bandas): los meses lluviosos tienen noches más templadas y días algo más frescos. Explicación: nubes. De día bloquean la radiación solar (máximas más bajas); de noche retienen la radiación de onda larga y evitan el enfriamiento (mínimas más altas).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="descomposición" class="slide level2">
+<h2>Descomposición</h2>
+<p><span class="eyebrow">Herramientas automáticas · stl</span></p>
+<div class="columns">
+<div class="column" style="width:38%;">
+<p><code>stl()</code> separa la serie en componente <span class="concepto"><strong>estacional</strong></span>, <span class="concepto"><strong>tendencia</strong></span> y <span class="concepto"><strong>resto</strong></span>, cada uno estimado con <span class="ojo"><strong>loess</strong></span> (regresión local suavizada).</p>
+<p>1 · datos <em>(data)</em><br> 2 · estacional <em>(seasonal)</em><br> 3 · tendencia <em>(trend)</em><br> 4 · resto = 1 − 2 − 3 <em>(remainder)</em></p>
+</div><div class="column" style="width:62%;">
+<div class="cell">
+<div>
+<div id="webr-34" class="exercise-cell">
+
+</div>
+<script type="webr-34-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo2LjQsImZpZy13aWR0aCI6OX0sImNvZGUiOiIjIHNlcmllIGRpYXJpYTogaW5pY2lvIGVuIDE5ODcsIDM2NSBkYXRvcyBwb3IgYcOxb1xuaGlnaCA8LSB0cyh1cHBlciwgc3RhcnQgPSBjKDE5ODcsIDEpLCBmcmVxdWVuY3kgPSAzNjUpXG51cCA8LSBzdGwoaGlnaCwgXCJwZXJpb2RpY1wiLCByb2J1c3QgPSBUUlVFKVxucGxvdCh1cCkifQ==
+</script>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>“periodic” fuerza un componente estacional igual en todos los años. El componente estacional no es la fórmula seno-coseno de antes: es una curva estimada con loess. Las barras grises a la derecha de cada panel tienen la misma altura en unidades de datos: sirven para comparar escalas.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="pronosticar-a-futuro" class="slide level2">
+<h2>Pronosticar a futuro</h2>
+<p><span class="eyebrow">Forecasting</span></p>
+<p>Para pronosticar se requieren modelos que trabajen bien con series de tiempo:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 39%">
+<col style="width: 60%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th>Fórmula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="concepto"><strong>Media móvil (MA)</strong></span></td>
+<td><em>X</em>ₜ = Σ β<em>ⱼ</em> ε<em>ₜ₋ⱼ</em>, <em>j</em> = 0 … <em>q</em></td>
+</tr>
+<tr class="even">
+<td><span class="concepto"><strong>Autorregresivo (AR)</strong></span></td>
+<td><em>X</em>ₜ = Σ α<em>ᵢ</em> <em>X</em>ₜ₋ᵢ + εₜ, <em>i</em> = 1 … <em>p</em></td>
+</tr>
+<tr class="odd">
+<td><span class="concepto"><strong>ARMA</strong></span></td>
+<td><em>X</em>ₜ = Σ α<em>ᵢ</em> <em>X</em>ₜ₋ᵢ + Σ β<em>ⱼ</em> ε<em>ₜ₋ⱼ</em></td>
+</tr>
+<tr class="even">
+<td><span class="concepto"><strong>ARIMA(<em>p</em>, <em>d</em>, <em>q</em>)</strong></span></td>
+<td>ARMA sobre la serie <span class="ojo"><strong>diferenciada <em>d</em> veces</strong></span> (la «I»)</td>
+</tr>
+</tbody>
+</table>
+<p><span class="texto-28">Un ARIMA estacional agrega (<em>P</em>, <em>D</em>, <em>Q</em>)[12]: los mismos términos, pero con lags de 12 meses.</span></p>
+<aside class="notes">
+<p>MA: el valor actual depende de los errores (shocks) aleatorios de los q pasos anteriores. AR: depende de sus propios p valores anteriores. ARMA combina ambos; ARIMA agrega la diferenciación.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="pronostica-bien-datos-de-prueba" class="slide level2">
+<h2>¿Pronostica bien? Datos de prueba</h2>
+<p><span class="eyebrow">Práctico 14 · Forecasting</span></p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div>
+<div id="webr-35" class="exercise-cell">
+
+</div>
+<script type="webr-35-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0IjoiNS42IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiIyBlbnRyZW5hciBjb24gMTk4Ny0yMDAzLCBwcm9iYXIgY29uIDIwMDQtMjAwNVxudHJhaW4gPC0gd2luZG93KHRlbXAsIGVuZCA9IGMoMjAwMywgMTIpKVxudGVzdCAgPC0gd2luZG93KHRlbXAsIHN0YXJ0ID0gYygyMDA0LCAxKSlcbmZfbWVkaWEgIDwtIG1lYW5mKHRyYWluLCBoID0gbGVuZ3RoKHRlc3QpKSAgICMgcHJvbWVkaW8gaGlzdG9yaWNvXG5mX3NuYWl2ZSA8LSBzbmFpdmUodHJhaW4sIGggPSBsZW5ndGgodGVzdCkpICAjIG1pc21vIG1lcyBkZWwgYcOxbyBhbnRlcmlvclxuZml0X2FyaW1hIDwtIGF1dG8uYXJpbWEodHJhaW4pICAgICAgICAgICAgICAgIyBtZWpvciBBUklNQSBzZWd1biBBSUNcbmZpdF9hcmltYVxuZl9hcmltYSAgPC0gZm9yZWNhc3QoZml0X2FyaW1hLCBoID0gbGVuZ3RoKHRlc3QpKVxuIyBlcnJvciBlbiBsb3MgZGF0b3MgZGUgcHJ1ZWJhIChtZW5vciBlcyBtZWpvcilcbnJiaW5kKG1lZGlhICA9IGFjY3VyYWN5KGZfbWVkaWEsICB0ZXN0KVtcIlRlc3Qgc2V0XCIsIGMoXCJSTVNFXCIsIFwiTUFFXCIpXSxcbiAgICAgIHNuYWl2ZSA9IGFjY3VyYWN5KGZfc25haXZlLCB0ZXN0KVtcIlRlc3Qgc2V0XCIsIGMoXCJSTVNFXCIsIFwiTUFFXCIpXSxcbiAgICAgIGFyaW1hICA9IGFjY3VyYWN5KGZfYXJpbWEsICB0ZXN0KVtcIlRlc3Qgc2V0XCIsIGMoXCJSTVNFXCIsIFwiTUFFXCIpXSkifQ==
+</script>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="cell">
+<div>
+<div id="webr-36" class="exercise-cell">
+
+</div>
+<script type="webr-36-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LCJmaWctd2lkdGgiOjd9LCJjb2RlIjoicGxvdChmX2FyaW1hLCBtYWluID0gXCJBUklNQTogcHJvbsOzc3RpY28gdnMuIGRhdG9zIHJlYWxlc1wiKVxubGluZXModGVzdCwgY29sID0gXCJyZWRcIiwgbHdkID0gMikifQ==
+</script>
+</div>
+</div>
+<p>ARIMA gana: <span class="clave"><strong>menor error en datos que no vio</strong></span>. Siempre comparar con una <span class="ojo"><strong>referencia simple</strong></span>.</p>
+</div></div>
+<aside class="notes">
+<p>ARIMA(0,0,1)(2,1,0)[12] with drift: una diferencia estacional (D = 1) y dos términos AR estacionales. RMSE en °C: media 5,68; snaive 1,66; ARIMA 1,31. El ajuste dentro de la muestra (AIC) no garantiza un buen pronóstico: por eso se evalúa con datos de prueba.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="residuos-y-pronóstico-a-5-años" class="slide level2">
+<h2>Residuos y pronóstico a 5 años</h2>
+<p><span class="eyebrow">Práctico 14 · Forecasting</span></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-37" class="exercise-cell">
+
+</div>
+<script type="webr-37-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo0LjIsImZpZy13aWR0aCI6Ny41fSwiY29kZSI6IiMgcmVzaWR1b3M6IGRlYmVuIHBhcmVjZXIgcnVpZG8gYmxhbmNvXG5jaGVja3Jlc2lkdWFscyhmaXRfYXJpbWEpIn0=
+</script>
+</div>
+</div>
+<p>Ljung-Box p = 0,012: <span class="ojo"><strong>queda algo de autocorrelación</strong></span> sin capturar.</p>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div>
+<div id="webr-38" class="exercise-cell">
+
+</div>
+<script type="webr-38-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LCJmaWctd2lkdGgiOjcuNX0sImNvZGUiOiIjIGNvbiB0b2RhIGxhIHNlcmllXG5mb3JlY2FzdF81IDwtIGZvcmVjYXN0KGF1dG8uYXJpbWEodGVtcCksIGggPSA1ICogMTIpXG5wbG90KGZvcmVjYXN0XzUsIG1haW4gPSBcIlByb27Ds3N0aWNvIEFSSU1BIGEgNSBhw7Fvc1wiKSJ9
+</script>
+</div>
+</div>
+<p>Bandas: <span class="concepto"><strong>intervalos de predicción</strong></span> del 80 % y 95 %; se ensanchan con el horizonte.</p>
+</div></div>
+</section>
+<section id="desafío-pronosticar-las-mínimas" class="slide level2 tu-turno scrollable">
+<h2>Desafío: pronosticar las mínimas</h2>
+<p><span class="eyebrow">Tu turno · Aplicar</span></p>
+<p><span class="tiempo">⏱ 8 min · en parejas</span></p>
+<p>Repitan la evaluación con la <span class="ojo"><strong>temperatura mínima mensual</strong></span> (<code>tmin</code>): entrenar hasta 2003, probar con 2004-2005.</p>
+<div class="opciones">
+<p><strong><code>window(serie, end = c(año, mes))</code></strong> y <strong><code>window(serie, start = c(año, mes))</code></strong>: año y mes como números. <strong>Modelos:</strong> <code>snaive(train, h = length(test))</code> y <code>forecast(auto.arima(train), h = length(test))</code>. <strong><code>accuracy(pronóstico, test)</code></strong>.</p>
+</div>
+<div class="cell" data-exercise="ej_pronostico">
+<div>
+<div id="webr-39" class="exercise-cell">
+
+</div>
+<script type="webr-39-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImVqX3Byb25vc3RpY28iLCJmaWctaGVpZ2h0Ijo0LjQsImZpZy13aWR0aCI6OH0sImNvZGUiOiJ0bWluIDwtIHRzKGFzLnZlY3Rvcih0YXBwbHkod2VhdGhlciRsb3dlciwgbGlzdCh3ZWF0aGVyJG1vbnRoLCB3ZWF0aGVyJHlyKSwgbWVhbikpLFxuICAgICAgICAgICBzdGFydCA9IGMoMTk4NywgMSksIGZyZXF1ZW5jeSA9IDEyKVxudHJhaW5fbWluIDwtIHdpbmRvdyh0bWluLCBlbmQgPSBfX19fX18pXG50ZXN0X21pbiAgPC0gd2luZG93KHRtaW4sIHN0YXJ0ID0gX19fX19fKVxuZl9zbiA8LSBzbmFpdmUodHJhaW5fbWluLCBoID0gbGVuZ3RoKHRlc3RfbWluKSlcbmZfYXIgPC0gZm9yZWNhc3QoYXV0by5hcmltYSh0cmFpbl9taW4pLCBoID0gbGVuZ3RoKHRlc3RfbWluKSlcbnJiaW5kKHNuYWl2ZSA9IGFjY3VyYWN5KGZfc24sIHRlc3RfbWluKVtcIlRlc3Qgc2V0XCIsIGMoXCJSTVNFXCIsIFwiTUFFXCIpXSxcbiAgICAgIGFyaW1hICA9IGFjY3VyYWN5KGZfYXIsIHRlc3RfbWluKVtcIlRlc3Qgc2V0XCIsIGMoXCJSTVNFXCIsIFwiTUFFXCIpXSlcbnBsb3QoZl9hcik7IGxpbmVzKHRlc3RfbWluLCBjb2wgPSBcInJlZFwiLCBsd2QgPSAyKSJ9
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ej_pronostico">
+<p>El último mes de entrenamiento es diciembre de 2003: <code>c(2003, 12)</code>. La prueba empieza en enero de 2004: <code>c(2004, 1)</code>.</p>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ej_pronostico">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a>tmin <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">as.vector</span>(<span class="fu">tapply</span>(weather<span class="sc">$</span>lower, <span class="fu">list</span>(weather<span class="sc">$</span>month, weather<span class="sc">$</span>yr), mean)),</span>
+<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a>           <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1987</span>, <span class="dv">1</span>), <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a>train_min <span class="ot">&lt;-</span> <span class="fu">window</span>(tmin, <span class="at">end =</span> <span class="fu">c</span>(<span class="dv">2003</span>, <span class="dv">12</span>))</span>
+<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a>test_min  <span class="ot">&lt;-</span> <span class="fu">window</span>(tmin, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">2004</span>, <span class="dv">1</span>))</span>
+<span id="cb4-5"><a href="" aria-hidden="true" tabindex="-1"></a>f_sn <span class="ot">&lt;-</span> <span class="fu">snaive</span>(train_min, <span class="at">h =</span> <span class="fu">length</span>(test_min))</span>
+<span id="cb4-6"><a href="" aria-hidden="true" tabindex="-1"></a>f_ar <span class="ot">&lt;-</span> <span class="fu">forecast</span>(<span class="fu">auto.arima</span>(train_min), <span class="at">h =</span> <span class="fu">length</span>(test_min))</span>
+<span id="cb4-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="at">snaive =</span> <span class="fu">accuracy</span>(f_sn, test_min)[<span class="st">"Test set"</span>, <span class="fu">c</span>(<span class="st">"RMSE"</span>, <span class="st">"MAE"</span>)],</span>
+<span id="cb4-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">arima  =</span> <span class="fu">accuracy</span>(f_ar, test_min)[<span class="st">"Test set"</span>, <span class="fu">c</span>(<span class="st">"RMSE"</span>, <span class="st">"MAE"</span>)])</span>
+<span id="cb4-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># snaive RMSE 2.02; arima RMSE 1.77</span></span>
+<span id="cb4-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(f_ar); <span class="fu">lines</span>(test_min, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="pregunta"><strong>¿Gana otra vez ARIMA? ¿Por cuánto? ¿Cambiarían su respuesta si la diferencia fuera de 0,05 °C?</strong></span></p>
+<aside class="notes">
+<p>Respuesta: auto.arima elige ARIMA(1,0,0)(1,1,0)[12] with drift. RMSE: snaive 2,02; ARIMA 1,77 (MAE 1,47 vs 1,30). ARIMA gana otra vez, por ~0,25 °C. Con una diferencia de 0,05 °C en solo 24 meses de prueba no se podría decir que un modelo es mejor: la diferencia estaría dentro de la variación esperable (existen pruebas formales, como la de Diebold-Mariano, dm.test en forecast).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="resumen" class="slide level2">
+<h2>Resumen</h2>
+<p><span class="eyebrow">Cierre</span></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 30%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pregunta</th>
+<th>Herramienta</th>
+<th>En R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>¿Difieren grupos en varias respuestas?</td>
+<td>MANOVA / PERMANOVA</td>
+<td><code>manova()</code>, <code>adonis2()</code></td>
+</tr>
+<tr class="even">
+<td>¿Difieren en dispersión?</td>
+<td>betadisper</td>
+<td><code>betadisper()</code>, <code>permutest()</code></td>
+</tr>
+<tr class="odd">
+<td>¿Hay dependencia serial?</td>
+<td>autocorrelación</td>
+<td><code>lag.plot()</code>, <code>acf()</code>, <code>dwtest()</code></td>
+</tr>
+<tr class="even">
+<td>¿Hay tendencia?</td>
+<td>regresión con errores AR(1)</td>
+<td><code>gls(..., correlation = corAR1())</code></td>
+</tr>
+<tr class="odd">
+<td>¿Es estacionaria?</td>
+<td>KPSS, diferenciar</td>
+<td><code>kpss.test()</code>, <code>diff()</code>, <code>ndiffs()</code></td>
+</tr>
+<tr class="even">
+<td>¿Se relacionan dos series?</td>
+<td>correlación cruzada</td>
+<td><code>ccf()</code> sobre anomalías</td>
+</tr>
+<tr class="odd">
+<td>¿Qué pasará?</td>
+<td>ARIMA evaluado con prueba</td>
+<td><code>auto.arima()</code>, <code>accuracy()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="tarjeta alerta">
+<p><span class="test"><strong>Datos en el tiempo casi nunca son independientes: revisen los residuos antes de creer en un p.</strong></span> Todo el código está en <code>Practicos/14_series_tiempo.R</code>.</p>
+</div>
+</section>
+<section id="ticket-de-salida" class="slide level2 tu-turno scrollable">
+<h2>Ticket de salida</h2>
+<p><span class="eyebrow">Tu turno · Cierre</span></p>
+<p><span class="tiempo">⏱ 3 min · individual</span></p>
+<p><span class="pregunta"><strong>Respondan en una línea cada una:</strong></span></p>
+<ol type="1">
+<li>PERMANOVA da p = 0,001 y betadisper p = 0,01. ¿Qué pueden concluir y qué no?</li>
+<li>Una regresión de la abundancia de aves contra el año (30 años) da p = 0,02, y DW = 0,6. ¿Qué harían?</li>
+<li>Un modelo tiene el menor AIC, pero en los datos de prueba pierde contra <code>snaive</code>. ¿Cuál usarían para pronosticar?</li>
+</ol>
+<div class="fragment tarjeta">
+<ol type="1">
+<li>Los grupos difieren, pero <span class="ojo"><strong>no se sabe si en posición, en dispersión o en ambas</strong></span>: reportar las dos y mirar la ordenación. 2. Residuos autocorrelacionados: reajustar con <span class="clave"><strong>gls + corAR1</strong></span>; el p de <code>lm</code> es demasiado optimista. 3. <code>snaive</code>: lo que importa es el error <span class="clave"><strong>en datos que el modelo no vio</strong></span>.</li>
+</ol>
+</div>
+</section>
+<section id="tu-espacio" class="slide level2">
+<h2>Tu espacio</h2>
+<p><span class="eyebrow">R en el navegador · Libre</span></p>
+<p>Escriban y ejecuten su propio código. La sesión de R es la misma de toda la clase: <span class="ojo"><code>film</code>, <code>data</code>, <code>dis_veg</code>, <code>bdisp_veg</code>, <code>flies</code>, <code>fit</code>, <code>temps</code>, <code>weather</code>, <code>temp</code>, <code>lluvia</code>, <code>train</code> y <code>test</code></span> ya están cargados.</p>
+<div class="cell">
+<div>
+<div id="webr-40" class="exercise-cell">
+
+</div>
+<script type="webr-40-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0Ijo1LjYsImZpZy13aWR0aCI6OX0sImNvZGUiOiIjIHN1IGPDs2RpZ28gYXF1w60ifQ==
+</script>
+</div>
+</div>
+<aside class="notes">
+<p>Celda libre para preguntas o pruebas en vivo. Ctrl/Cmd + Enter ejecuta; Start Over la deja en blanco.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC42LjAvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsInZlZ2FuIiwibmxtZSIsImxtdGVzdCIsInRzZXJpZXMiLCJ6b28iLCJmb3JlY2FzdCJdLCJyZXBvcyI6W119LCJyZW5kZXJfZGYiOiJkZWZhdWx0In0=
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00MCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00MCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNDAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00MC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV80MCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNDAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzk7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM5ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzktY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0zOS1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzM5ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8zOSwge30pO1xuX3dlYnJfZmVlZGJhY2tfMzkgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzM5LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM4ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zOC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzgsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM3ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zNy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zNyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM2ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zNiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzYsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM1ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zNS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzUsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzM0ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zNC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zNCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMzID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0zMy1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzMzID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8zMywge30pO1xuX3dlYnJfZmVlZGJhY2tfMzMgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzMzLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzIsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMxID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMzA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMzAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zMC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zMCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMzAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjk7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI5ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjktY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yOSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjksIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI4ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yOC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjgsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI3ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yNy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yNyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI2ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yNiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjYsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI1ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yNS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjUsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzI0ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0yNC1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzI0ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yNCwge30pO1xuX3dlYnJfZmVlZGJhY2tfMjQgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzI0LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIzID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yMyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjMsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjIsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIxID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMjAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yMC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yMCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMjAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTk7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE5ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTktY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xOSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTksIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE4ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xOC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTgsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE3ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xNy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xNyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE2ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xNiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTYsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE1ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xNS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTUsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzE0ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xNC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xNCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEzID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTMsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTIsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzExID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0xMS1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzExID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMSwge30pO1xuX3dlYnJfZmVlZGJhY2tfMTEgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzExLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC05IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV85O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzkgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici05LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV85ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl85LCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfODtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTgiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl84ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItOC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTgtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfOCwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTciLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici03IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNyA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici03LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzcgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV82ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl82LCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl81ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTUtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNSwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTQiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNCA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzQgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8zLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8yID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTItY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMiwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTEiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6Il93ZWJyX3ZhbHVlXzEgPSB7XG4gIGNvbnN0IHsgaGlnaGxpZ2h0UiwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXZhbHVhdGlvbiBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHtcbiAgICBpZDogXCJ3ZWJyLTEtY29udGVudHNcIixcbiAgICBlY2hvOiB0cnVlLFxuICAgIG91dHB1dDogdHJ1ZVxuICB9LCBibG9jay5hdHRyKTtcblxuICAvLyBFdmFsdWF0ZSB0aGUgcHJvdmlkZWQgUiBjb2RlXG4gIGNvbnN0IHJlc3VsdCA9IHdlYlJPanMucHJvY2Vzcyh7Y29kZTogYmxvY2suY29kZSwgb3B0aW9uc30sIHt9KTtcblxuICAvLyBFYXJseSB5aWVsZCB3aGlsZSB3ZSB3YWl0IGZvciB0aGUgZmlyc3QgZXZhbHVhdGlvbiBhbmQgcmVuZGVyXG4gIGlmIChvcHRpb25zLm91dHB1dCAmJiAhKFwiMVwiIGluIHdlYlJPanMucmVuZGVyZWRPanMpKSB7XG4gICAgY29uc3QgY29udGFpbmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKTtcbiAgICBjb25zdCBzcGlubmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKTtcblxuICAgIGlmIChvcHRpb25zLmVjaG8pIHtcbiAgICAgIC8vIFNob3cgb3V0cHV0IGFzIGhpZ2hsaWdodGVkIHNvdXJjZVxuICAgICAgY29uc3QgcHJlRWxlbSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJwcmVcIik7XG4gICAgICBjb250YWluZXIuY2xhc3NOYW1lID0gXCJzb3VyY2VDb2RlXCI7XG4gICAgICBwcmVFbGVtLmNsYXNzTmFtZSA9IFwic291cmNlQ29kZSByXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKGhpZ2hsaWdodFIoYmxvY2suY29kZSkpO1xuICAgICAgc3Bpbm5lci5jbGFzc05hbWUgPSBcInNwaW5uZXItZ3JvdyBzcGlubmVyLWdyb3ctc20gbS0yIHBvc2l0aW9uLWFic29sdXRlIHRvcC0wIGVuZC0wXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKHNwaW5uZXIpO1xuICAgICAgY29udGFpbmVyLmFwcGVuZENoaWxkKHByZUVsZW0pO1xuICAgIH0gZWxzZSB7XG4gICAgICBzcGlubmVyLmNsYXNzTmFtZSA9IFwic3Bpbm5lci1ib3JkZXIgc3Bpbm5lci1ib3JkZXItc21cIjtcbiAgICAgIGNvbnRhaW5lci5hcHBlbmRDaGlsZChzcGlubmVyKTtcbiAgICB9XG5cbiAgICB5aWVsZCBjb250YWluZXI7XG4gIH1cblxuICB3ZWJST2pzLnJlbmRlcmVkT2pzW1wiMVwiXSA9IHRydWU7XG4gIHlpZWxkIGF3YWl0IHJlc3VsdDtcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ3ZWJST2pzID0ge1xuICBjb25zdCB7IFdlYlIsIENoYW5uZWxUeXBlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lLldlYlI7XG4gIGNvbnN0IHtcbiAgICBXZWJSRXZhbHVhdG9yLFxuICAgIFdlYlJFbnZpcm9ubWVudE1hbmFnZXIsXG4gICAgc2V0dXBSLFxuICAgIGI2NERlY29kZSxcbiAgICBjb2xsYXBzZVBhdGhcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIHdlYlIgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgLy8gSW5pdGlhbGlzZSB3ZWJSIGFuZCBzZXR1cCBmb3IgUiBjb2RlIGV2YWx1YXRpb25cbiAgbGV0IHdlYlJQcm9taXNlID0gKGFzeW5jICh3ZWJSKSA9PiB7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIC8vIEluc3RhbGwgcHJvdmlkZWQgbGlzdCBvZiBwYWNrYWdlc1xuICAgIC8vIEVuc3VyZSB3ZWJSIGRlZmF1bHQgcmVwbyBpcyBpbmNsdWRlZFxuICAgIGRhdGEucGFja2FnZXMucmVwb3MucHVzaChcImh0dHBzOi8vcmVwby5yLXdhc20ub3JnXCIpXG4gICAgYXdhaXQgZGF0YS5wYWNrYWdlcy5wa2dzLm1hcCgocGtnKSA9PiAoKSA9PiB7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgICB3ZWJyOjppbnN0YWxsKHBrZywgcmVwb3MgPSByZXBvcylcbiAgICAgICAgbGlicmFyeShwa2csIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSlcbiAgICAgIGAsIHsgZW52OiB7XG4gICAgICAgIHBrZzogcGtnLFxuICAgICAgICByZXBvczogZGF0YS5wYWNrYWdlcy5yZXBvcyxcbiAgICAgIH19KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICBjb25zdCBhbmFseXNpcyA9IGF3YWl0IHdlYlIuRlMuYW5hbHl6ZVBhdGgocGF0aCk7XG4gICAgICAgIGlmICghYW5hbHlzaXMuZXhpc3RzKSB7XG4gICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yOiBcIiR7ZS5tZXNzYWdlfVwiLmApO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH0pKG5ldyBXZWJSKGRhdGEub3B0aW9ucykpO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgd2ViUlByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIHdlYlJQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIn1dfQ==
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJtYW5vdmFfZmlsbV9wbGFzdGljby50eHQiLCJkYXRhLmNzdiIsImJsb3dmbHkudHh0IiwidGVtcC50eHQiLCJTaWx3b29kV2VhdGhlci50eHQiXQ==
+</script>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="img/logo-CTE.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>Bioestadística · Clase 12 · Series de tiempo</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="clase12_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="clase12_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="clase12_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="clase12_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="clase12_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="clase12_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="clase12_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="clase12_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="clase12_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="clase12_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'fast',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+
+        height: 1080,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script>
+    // webR no funciona abriendo el .html como archivo (file://): avisar cómo abrirlo
+    if (location.protocol === 'file:') {
+      document.addEventListener('DOMContentLoaded', function () {
+        var d = document.createElement('div');
+        d.textContent = 'El código de R no puede ejecutarse abriendo el archivo directamente. Abran la presentación con un servidor local: en la carpeta del curso, ./presentar 12';
+        d.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#C62828;color:#fff;font:600 20px "IBM Plex Sans",sans-serif;padding:12px 24px;text-align:center';
+        document.body.appendChild(d);
+      });
+    }
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../..";
+    window._ojs.paths.docToRoot = "";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copiado");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copiado");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
